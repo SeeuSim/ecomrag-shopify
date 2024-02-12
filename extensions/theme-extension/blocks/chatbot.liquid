@@ -1,6 +1,7 @@
 <script src="https://ecomrag--development.gadget.app/api/client/web.min.js" defer="defer"></script>
 <script src="{{ 'purify.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'chatbot.js' | asset_url }}" defer="defer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 {{ 'chatbot.css' | asset_url | stylesheet_tag }}
 
 <div id="chatbot-toggle" style="bottom: {{ block.settings.toggle_bottom }}; top: {{ block.settings.toggle_top }}; right: {{ block.settings.toggle_right }}; left: {{ block.settings.toggle_left }}">
@@ -22,6 +23,10 @@
     
   </div>
   <form id="chat-form">
+    <label for="file-upload" class="icon-button">
+      <i class="fas fa-file-upload"></i>
+    </label>
+    <input type="file" id="file-upload" style="display: none;">
     <input name="chatInput" autocomplete="off"/>
     <button name="chatButton" type="submit">Send</button>
   </form>
