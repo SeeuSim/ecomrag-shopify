@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatbotCloseToggle = document.getElementById("chatbot-close-toggle");
 
   const fileUpload = document.getElementById("file-upload");
-
+  let fileContent = null;
   fileUpload.addEventListener("change", async function () {
     if (this.files.length === 0) {
       return;
@@ -23,31 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const reader = new FileReader();
   
     reader.onload = async function (event) {
-      const fileContent = event.target.result;
-  
-      // Now you can send `fileContent` to your server along with the user's message.
-      // This will depend on how your server expects to receive file content.
-      // For example, if your server expects a JSON payload with a `fileContent` field:
-      const response = await chatbotApi.fetch("/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: chatInput.value,
-          image: fileContent,
-        }),
-      });
-  
-      if (response.ok) {
-        // If the server responded with a status code of 200-299, the upload was successful.
-        // Change the text of the upload button to indicate this.
-        document.querySelector('.icon-button').innerHTML = '<i class="fas fa-check"></i> Uploaded';
-      } else {
-        // If the server responded with a status code outside of 200-299, the upload failed.
-        // Change the text of the upload button to indicate this.
-        document.querySelector('.icon-button').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload failed';
-      }
+      fileContent = event.target.result; // Store the file content in the variable
     };
   
     reader.readAsDataURL(file); // Convert the file to Base64
@@ -94,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       body: JSON.stringify({
         message: chatInputValue,
+        image: fileContent,
       }),
       stream: true,
     });
