@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     userChatBubble.appendChild(userInput);
     chat.appendChild(userChatBubble);
     chat.appendChild(document.createElement("br"));
+    chat.scrollTop = chat.scrollHeight;
 
     // add DOM elements for response
     const chatbotResponse = document.createElement("p");
@@ -41,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotThinkingText = document.createTextNode("Thinking...");
     chatbotThinking.appendChild(chatbotThinkingText);
     chat.appendChild(chatbotThinking);
+
+
 
     // call Gadget /chat HTTP route with stream option
     const response = await chatbotApi.fetch("/chat", {

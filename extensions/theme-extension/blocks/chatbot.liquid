@@ -4,14 +4,22 @@
 {{ 'chatbot.css' | asset_url | stylesheet_tag }}
 
 <div id="chatbot-toggle" style="bottom: {{ block.settings.toggle_bottom }}; top: {{ block.settings.toggle_top }}; right: {{ block.settings.toggle_right }}; left: {{ block.settings.toggle_left }}">
-  <img id="chatbot-open-toggle" src="{{ "cutedog.jpeg" | asset_img_url: 'large' }}" height="50" width="50" loading="lazy">
+  <img id="chatbot-open-toggle" src="{{ "gizmo.png" | asset_img_url: 'large' }}" height="50" width="50" loading="lazy">
   <img id="chatbot-close-toggle" class="hidden" src="{{ "close.png" | asset_img_url: 'large' }}" height="35" width="35" loading="eager">
 </div>
 <div id="chatbot-window">
-  <div id="chat">
+  <div id="chat-header">
+    <img id="chat-logo" src="{{ "gizmo.png" | asset_img_url: 'large' }}" alt="Logo">
+    <span id="chat-name">Product Recommender</span>
+    <div id="chat-status">
+      <span id="status-text">Status:</span>
+      <span id="online-indicator">Online</span>
+    </div>
+  </div>  <div id="chat">
     <p>
       {{ "chatbot.welcome.label" | t }}
     </p>
+    
   </div>
   <form id="chat-form">
     <input name="chatInput" autocomplete="off"/>

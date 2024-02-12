@@ -1,79 +1,194 @@
+/* Main chatbot window styles */
 #chatbot-window {
-  display: none;
-  bottom: 85px;
-  right: 10px;
-  height: 450px;
-  width: 325px;
-  background: white;
-  border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 0.48px 2.41px -0.38px,
-    rgba(0, 0, 0, 0.17) 0px 4px 20px -0.75px;
-  z-index: 1000;
-  padding: 8px;
-  flex-direction: column;
+  display: none; /* Hidden by default */
+  bottom: 85px; right: 10px; /* Positioning */
+  height: auto; /* Adjust height dynamically */
+  max-height: 450px; /* Maximum height */
+  width: 90%; /* Use a percentage width for responsiveness */
+  max-width: 325px; /* Maximum width */
+  background: #f9f9f9; /* Light background for the chat */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  z-index: 1000; /* Ensure it's above other elements */
+  padding: 16px; /* Spacing around content */
+  flex-direction: column; /* Organize children */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern font */
+  transition: all 0.3s ease; /* Smooth transition for toggling */
 }
-#chatbot-window > #chat {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-#chatbot-window > #chat > .bot {
-  padding: 4px;
-  margin: 4px;
-}
-#chatbot-window > #chat > .user {
-  text-align: right;
-  background-color: #b00020;
-  color: white;
-  border-radius: 4px;
-  padding: 4px;
-}
-#chatbot-window > #chat > .error {
-  color: red;
-  padding: 4px;
-  margin: 4px;
-}
+
+/* Chat window visibility */
 #chatbot-window.visible {
   display: flex;
   position: fixed;
 }
 
-#chat-form {
+/* Chat content styles */
+#chatbot-window > #chat {
   display: flex;
-}
-#chat-form > input {
+  flex-direction: column;
   flex-grow: 1;
-  margin-right: 2px;
-}
-#chat-form > input:focus {
-  border: 2px cornflowerblue solid;
-  border-radius: 4px;
-  outline: none;
-}
-#chat-form > button {
-  color: white;
-  background: black;
-  border: 1px black solid;
-  border-radius: 4px;
-}
-#chat-form > button:disabled {
-  color: lightgrey;
-  background: darkgrey;
+  align-items: flex-start;
+  overflow-y: auto;
+  margin-bottom: 12px; /* Spacing before the input form */
+  max-height: 400px;
 }
 
-#chatbot-toggle {
-  z-index: 1000;
-  position: fixed;
+/* Chat header styles */
+#chatbot-window > #chat-header {
   display: flex;
-  height: 70px;
-  width: 70px;
-  background: white;
-  border: 1px black solid;
-  border-radius: 50px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top-left-radius: 10px; /* Match the chatbot window's border radius */
+  border-top-right-radius: 10px;
+  border-bottom: 1px solid #ccc; /* Add a line below the header */
+}
+
+#chat-logo {
+  width: 30px; /* Adjust as needed */
+  height: 30px; /* Adjust as needed */
+}
+
+#chat-name {
+  margin-left: 10px; /* Space out the name from the logo */
+  color: black;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+#chat-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto; /* Push to the right */
+}
+
+#status-text {
+  font-size: 0.7em;
+  color: black;
+}
+
+#online-indicator {
+  position: relative;
+  font-size: 0.7em;
+  color: green;
+  padding-left: 13px; /* Make room for the status indicator */
+}
+
+#online-indicator:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: green;
+  box-shadow: 0 0 5px green;
+}
+
+/* Bot message styles */
+#chatbot-window > #chat > .bot {
+  background-color: #e0e0e0; /* Different background for bot messages */
+  border-radius: 15px; /* Rounded corners for bubbles */
+  padding: 8px 12px; /* Padding inside bubbles */
+  margin: 4px 0; /* Spacing between messages */
+  max-width: 80%; /* Max width for wrapping */
+}
+
+/* User message styles */
+#chatbot-window > #chat > .user {
+  align-self: flex-end;
+  background-color: #007bff; /* Use a brand color for user messages */
+  color: white;
+  border-radius: 15px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* Error message styles */
+#chatbot-window > #chat > .error {
+  color: #d9534f; /* Error color */
+  padding: 8px 12px;
+  margin: 4px 0;
+}
+
+/* Chat form and elements */
+#chat-form {
+  display: flex;
+  border-top: 1px solid #e0e0e0; /* Separator */
+  padding-top: 8px; /* Spacing from the chat to form */
+}
+
+/* Input field */
+#chat-form > input {
+  flex-grow: 1;
+  margin-right: 8px;
+  padding: 10px; /* Comfortable padding for typing */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 20px; /* Rounded edges */
+  outline: none; /* Remove focus outline */
+  transition: border-color 0.2s; /* Smooth transition for focus */
+}
+
+/* Input focus state */
+#chat-form > input:focus {
+  border-color: #007bff; /* Highlight color on focus */
+}
+
+/* Send button */
+#chat-form > button {
+  padding: 10px 16px; /* Button size */
+  color: white;
+  font: bold;
+  background-color: #007bff; /* Brand color */
+  border: none; /* No border */
+  border-radius: 20px; /* Match input field radius */
+  cursor: pointer; /* Pointer on hover */
+  transition: background-color 0.2s; /* Color transition on hover */
+}
+
+/* Button hover state */
+#chat-form > button:hover {
+  background-color: #0056b3; /* Darken on hover for feedback */
+}
+
+
+#chat-form > button:disabled {
+  background: #cfd8dc; /* Light grey when disabled */
+  color: #9e9e9e; /* Dark grey text when disabled */
+}
+
+/* Toggle button styling */
+#chatbot-toggle {
+  z-index: 1001; /* Above the chatbot window */
+  position: fixed;
+  bottom: 15px; /* Slightly raised above the bottom */
+  right: 15px;
+  height: 50px;
+  width: 50px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  transition: transform 0.3s ease-in-out;
 }
+
+#chatbot-toggle:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
 #chatbot-toggle > img {
-  margin: auto;
+  width: 70%; /* Smaller images within the button */
+  height: auto;
+  margin: 15%;
 }
-#chatbot-toggle > span > .hidden {
+
+.hidden {
   display: none;
 }
