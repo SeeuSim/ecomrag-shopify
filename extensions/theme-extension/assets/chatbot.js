@@ -18,23 +18,38 @@ document.addEventListener("DOMContentLoaded", function () {
     if (this.files.length === 0) {
       return;
     }
-  
+
     const file = this.files[0];
+
+    // File type validation
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    // File size validation
+    if (file.size > 2000000) { // 2MB
+      alert('Please upload an image file smaller than 2MB');
+      return;
+    }
+
     const reader = new FileReader();
-  
+
     reader.onload = async function (event) {
-      fileContent = event.target.result; // Store the file content in the variable
+      fileContent = event.target.result;
     };
-  
-    reader.readAsDataURL(file); // Convert the file to Base64
+
+    reader.onerror = function () {
+      alert('Failed to read file');
+      reader.abort();
+    };
+
+    reader.readAsDataURL(file);
   });
 
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
     event.preventDefault();
-    // disable input and button
-    chatInput.toggleAttribute("disabled");
-    chatButton.toggleAttribute("disabled");
 
     // get user-inputted message
     const chatInputValue = chatInput.value;
@@ -60,29 +75,60 @@ document.addEventListener("DOMContentLoaded", function () {
     chatbotThinking.appendChild(chatbotThinkingText);
     chat.appendChild(chatbotThinking);
 
+    try {
+      // call Gadget /chat HTTP route with stream option
+      const response = await chatbotApi.fetch("/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: chatInputValue,
+          image: fileContent,
+        }),
+        stream: true,
+      });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    // call Gadget /chat HTTP route with stream option
-    const response = await chatbotApi.fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: chatInputValue,
-        image: fileContent,
-      }),
-      stream: true,
-    });
+      // read from the returned stream
+      const decodedStreamReader = response.body
+        .pipeThrough(new TextDecoderStream())
+        .getReader();
 
-    // read from the returned stream
-    const decodedStreamReader = response.body
-      .pipeThrough(new TextDecoderStream())
-      .getReader();
+      // handle any stream errors
+      decodedStreamReader.closed.catch((error) => {
+        // display stream error
+        const chatbotError = document.createElement("p");
+        chatbotError.classList.add("error");
+        const chatbotErrorText = document.createTextNode(
+          `Sorry, something went wrong: ${error.toString()}`
+        );
+        chatbotError.appendChild(chatbotErrorText);
+        chat.appendChild(chatbotError);
+        // also add error to console
+        console.error(error.toString());
+      });
 
-    // handle any stream errors
-    decodedStreamReader.closed.catch((error) => {
-      // display stream error
+      // parse the stream data
+      let replyText = "";
+      while (true) {
+        const { value, done } = await decodedStreamReader.read();
+
+        // stop reading the stream
+        if (done) {
+          chat.removeChild(chatbotThinking);
+          break;
+        }
+
+        // append the stream data to the response text
+        replyText += value;
+        // use DOMPurify to sanitize the response before adding to the DOM
+        chatbotResponse.innerHTML = DOMPurify.sanitize(replyText);
+      }
+    } catch (error) {
       const chatbotError = document.createElement("p");
       chatbotError.classList.add("error");
       const chatbotErrorText = document.createTextNode(
@@ -90,27 +136,10 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       chatbotError.appendChild(chatbotErrorText);
       chat.appendChild(chatbotError);
-      // also add error to console
       console.error(error.toString());
-    });
-
-    // parse the stream data
-    let replyText = "";
-    while (true) {
-      const { value, done } = await decodedStreamReader.read();
-
-      // stop reading the stream
-      if (done) {
-        chatInput.toggleAttribute("disabled");
-        chatButton.toggleAttribute("disabled");
-        chat.removeChild(chatbotThinking);
-        break;
-      }
-
-      // append the stream data to the response text
-      replyText += value;
-      // use DOMPurify to sanitize the response before adding to the DOM
-      chatbotResponse.innerHTML = DOMPurify.sanitize(replyText);
+    } finally {
+      chatInput.toggleAttribute("disabled");
+      chatButton.toggleAttribute("disabled");
     }
   });
 
