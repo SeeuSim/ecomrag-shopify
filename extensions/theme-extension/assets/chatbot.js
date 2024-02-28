@@ -76,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error(error.toString());
     });
 
+    const chatWindow = document.getElementById("chat");
+
     // parse the stream data
     let replyText = "";
     while (true) {
@@ -93,6 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
       replyText += value;
       // use DOMPurify to sanitize the response before adding to the DOM
       chatbotResponse.innerHTML = DOMPurify.sanitize(replyText);
+      
+      chatWindow.scrollTop = chatWindow.scrollHeight;
     }
   });
 
