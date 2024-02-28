@@ -1,38 +1,90 @@
-<script src="https://ecomrag--development.gadget.app/api/client/web.min.js" defer="defer"></script>
+<script src="https://cookdem--development.gadget.app/api/client/web.min.js" defer="defer"></script>
 <script src="{{ 'purify.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'chatbot.js' | asset_url }}" defer="defer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 {{ 'chatbot.css' | asset_url | stylesheet_tag }}
 
 <div id="chatbot-toggle" style="bottom: {{ block.settings.toggle_bottom }}; top: {{ block.settings.toggle_top }}; right: {{ block.settings.toggle_right }}; left: {{ block.settings.toggle_left }}">
-  <img id="chatbot-open-toggle" src="{{ "gizmo.png" | asset_img_url: 'large' }}" height="50" width="50" loading="lazy">
-  <img id="chatbot-close-toggle" class="hidden" src="{{ "close.png" | asset_img_url: 'large' }}" height="35" width="35" loading="eager">
+  <img
+    id="chatbot-open-toggle"
+    src="{{ "assistant.jpg" | asset_img_url: 'large' }}"
+    height="50"
+    width="50"
+    loading="lazy">
+  <img
+    id="chatbot-close-toggle"
+    class="hidden"
+    src="{{ "close.png" | asset_img_url: 'large' }}"
+    height="35"
+    width="35"
+    loading="eager">
 </div>
 <div id="chatbot-window">
-  <div id="chat-header">
-    <img id="chat-logo" src="{{ "gizmo.png" | asset_img_url: 'large' }}" alt="Logo">
-    <span id="chat-name">Product Recommender</span>
-    <div id="chat-status">
-      <span id="status-text">Status:</span>
-      <span id="online-indicator">Online</span>
+  <div class="chat-header">
+    <div class="chat-header-content">
+
+      <div class="chat-header-avatar-container">
+
+        <img
+          src="{{ 'assistant.jpg' | asset_img_url: 'large' }}"
+          style="border-radius: 50%;"
+          height="40"
+          width="40">
+        <p class="chat-header-title">AskShop.ai</p>
+      </div>
+
+      <div id="close-icon">
+        <svg
+          fill="#fff"
+          height="16px"
+          width="16px"
+          version="1.1"
+          id="Capa_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 460.775 460.775"
+          xml:space="preserve">
+          <path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55
+     c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55
+     c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505
+     c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55
+     l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719
+     c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z" />
+        </svg>
+      </div>
+
     </div>
-  </div>  <div id="chat">
+  </div>
+
+  <div id="chat">
     <p>
       {{ "chatbot.welcome.label" | t }}
     </p>
-    
   </div>
   <form id="chat-form">
-    <label for="file-upload" class="icon-button">
-      <i class="fas fa-file-upload"></i>
-    </label>
-    <input type="file" id="file-upload" style="display: none;">
-    <input name="chatInput" autocomplete="off"/>
-    <button name="chatButton" type="submit">Send</button>
-  </form>
-</div>
-
-{% schema %}
+    <input name="chatInput" autocomplete="off" />
+    <button name="chatButton" type="submit">
+      <svg
+        fill="#000000"
+        version="1.1"
+        id="Capa_1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        width="20px"
+        height="20px"
+        viewBox="0 0 31.806 31.806"
+        xml:space="preserve">
+        <g>
+        <g>
+          <path d="M1.286,12.465c-0.685,0.263-1.171,0.879-1.268,1.606c-0.096,0.728,0.213,1.449,0.806,1.88l6.492,4.724L30.374,2.534
+       L9.985,22.621l8.875,6.458c0.564,0.41,1.293,0.533,1.964,0.33c0.67-0.204,1.204-0.713,1.444-1.368l9.494-25.986
+       c0.096-0.264,0.028-0.559-0.172-0.756c-0.199-0.197-0.494-0.259-0.758-0.158L1.286,12.465z" />
+          <path d="M5.774,22.246l0.055,0.301l1.26,6.889c0.094,0.512,0.436,0.941,0.912,1.148c0.476,0.206,1.025,0.162,1.461-0.119
+       c1.755-1.132,4.047-2.634,3.985-2.722L5.774,22.246z" />
+        </g>
+      </g>
+    </svg>
+  </button>
+</form></div>{% schema %}
 {
   "name": "Gadget chatbot",
   "target": "body",
@@ -42,25 +94,21 @@
       "label": "bottom",
       "id": "toggle_bottom",
       "default": "10px"
-    },
-    {
+    }, {
       "type": "text",
       "label": "top",
       "id": "toggle_top",
       "default": "auto"
-    },
-    {
+    }, {
       "type": "text",
       "label": "left",
       "id": "toggle_left",
       "default": "auto"
-    },
-    {
+    }, {
       "type": "text",
       "label": "right",
       "id": "toggle_right",
       "default": "10px"
     }
   ]
-}
-{% endschema %}
+}{% endschema %}
