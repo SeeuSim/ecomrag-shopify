@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chat = document.getElementById("chat");
   const chatForm = document.getElementById("chat-form");
   const chatInput = chatForm.elements.chatInput;
-  const chatHeader = document.getElementById("chat-header");
+  // const chatHeader = document.getElementById("chat-header");
   const chatButton = chatForm.elements.chatButton;
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const chatbotOpenToggle = document.getElementById("chatbot-open-toggle");
@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     chatInput.toggleAttribute("disabled");
     chatButton.toggleAttribute("disabled");
 
-    const fileInput = document.getElementById('file-upload');
     const formData = new FormData();
   
     // get user-inputted message
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const file = fileUpload.files[0];  
     if (file) {
-      formData.append("image", file); 
+      formData.append("image", file);
     }
 
     // add input to chat window and disable input
@@ -49,12 +48,14 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.appendChild(chatbotResponse);
 
     // add DOM elements for "thinking" indicator
+    const chatWindow = document.getElementById('chat');
     const chatbotThinking = document.createElement("p");
     const chatbotThinkingText = document.createTextNode(
       "Finding the most suited product..."
     );
     chatbotThinking.appendChild(chatbotThinkingText);
     chat.appendChild(chatbotThinking);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
     
     // call Gadget /chat HTTP route with stream option
     let response;
@@ -96,8 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // also add error to console
       console.error(error.toString());
     });
-
-    const chatWindow = document.getElementById("chat");
 
     // parse the stream data
     let replyText = "";
