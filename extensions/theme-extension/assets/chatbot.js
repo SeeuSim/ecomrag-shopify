@@ -21,9 +21,19 @@ document.addEventListener("DOMContentLoaded", function () {
     chatInput.toggleAttribute("disabled");
     chatButton.toggleAttribute("disabled");
 
+    const fileInput = document.getElementById('file-upload');
+    const formData = new FormData();
+  
     // get user-inputted message
     const chatInputValue = chatInput.value;
     chatInput.value = "";
+
+    formData.append("message", chatInput.value); 
+
+    const file = fileUpload.files[0];  
+    if (file) {
+      formData.append("image", file); 
+    }
 
     // add input to chat window and disable input
     const userInput = document.createTextNode(chatInputValue);
@@ -46,16 +56,24 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.appendChild(chatbotThinking);
 
     // call Gadget /chat HTTP route with stream option
-    const response = await chatbotApi.fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: chatInputValue,
-      }),
-      stream: true,
-    });
+    try {
+      const response = await chatbotApi.fetch("/chat", {
+        method: "POST",
+        body: formData,
+        stream: true,
+      });
+  
+      if (response.ok) {
+        // Handle successful submission here
+        console.log('Message and file sent successfully');
+      } else {
+        // Handle server errors or invalid responses here
+        console.error('Failed to send message and file');
+      }
+    } catch (error) {
+      // Handle network or unexpected errors here
+      console.error('Error sending message and file:', error);
+    }
 
     // read from the returned stream
     const decodedStreamReader = response.body
