@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatbotOpenToggle = document.getElementById("chatbot-open-toggle");
   const chatbotCloseToggle = document.getElementById("chatbot-close-toggle");
   const closeIcon = document.getElementById("close-icon");
+  const fileUpload = document.getElementById('file-upload');
 
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatInputValue = chatInput.value;
     chatInput.value = "";
 
-    formData.append("message", chatInput.value); 
+    formData.append("message", chatInputValue); 
 
     const file = fileUpload.files[0];  
     if (file) {
@@ -54,10 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     chatbotThinking.appendChild(chatbotThinkingText);
     chat.appendChild(chatbotThinking);
-
+    
     // call Gadget /chat HTTP route with stream option
+    let response;
+    console.log(formData);
     try {
-      const response = await chatbotApi.fetch("/chat", {
+      response = await chatbotApi.fetch("/chat", {
         method: "POST",
         body: formData,
         stream: true,
