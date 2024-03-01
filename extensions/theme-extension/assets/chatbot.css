@@ -269,7 +269,7 @@
   white-space: nowrap;
 }
 
-#upload-preview-container > div > button {
+#upload-preview-container > div > label {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -287,7 +287,7 @@
   display: none;
 }
 
-#upload-preview-container > div > button:hover {
+#upload-preview-container > div > label:hover {
   background-color: #f5f5f5;
   cursor: pointer;
   transform: scale(1.05);
@@ -296,6 +296,6 @@
   color: #dc2626;
 }
 
-#upload-preview-container > div > button > #lucide-x {
+#upload-preview-container > div > label > #lucide-x {
   display: flex;
 }

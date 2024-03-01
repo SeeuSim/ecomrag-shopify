@@ -16,6 +16,51 @@ document.addEventListener("DOMContentLoaded", function () {
   const fileUpload = document.getElementById('file-upload');
   const previewContainer = document.getElementById('upload-preview-container');
 
+  async function fileUploadOnChange(event) {
+    // Remove existing previews
+    if (previewContainer.childNodes.length > 0) {
+      for (const node of previewContainer.childNodes) {
+        previewContainer.removeChild(node);
+      }
+    }
+
+    // Remove existing files
+    if (fileUpload.files !== null) {
+      fileUpload.files = null;
+    }
+
+    const previewElement = document.createElement('div');
+    const name = document.createElement('span');
+    const thumbnail = document.createElement('img');
+    const deleteButton = document.createElement('label');
+    const xIcon = document.getElementById("lucide-x").cloneNode(true);
+    deleteButton.appendChild(xIcon);
+
+    var reader = new FileReader();
+    reader.onload = function () {
+      thumbnail.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    name.textContent = event.target.files[0].name;
+    previewElement.appendChild(thumbnail);
+    previewElement.appendChild(name);
+    previewElement.appendChild(deleteButton);
+    previewContainer.appendChild(previewElement);
+    deleteButton.addEventListener('click', function (event) {
+      console.log('deleting node');
+      event.preventDefault();
+      previewContainer.removeChild(previewElement);
+      fileUpload.files = null;
+      fileUpload.addEventListener('input', fileUploadOnChange);
+    });
+
+    let container = new DataTransfer();
+    container.items.add(event.target.files[0]);
+    fileUpload.files = container.files;
+    document.getElementById('chat-input').focus();
+  };
+
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -23,17 +68,15 @@ document.addEventListener("DOMContentLoaded", function () {
     chatInput.toggleAttribute("disabled");
     chatButton.toggleAttribute("disabled");
 
-    // const formData = new FormData();
-    
+    if (previewContainer.childNodes.length > 0) {
+      for (const node of previewContainer.childNodes) {
+        previewContainer.removeChild(node);
+      }
+    }
+
     // get user-inputted message
     const chatInputValue = chatInput.value;
     chatInput.value = "";
-    // formData.append("message", chatInputValue); 
-    
-    // const file = fileUpload.files[0];
-    // if (file) {
-    //   formData.append("image", file);
-    // }
     
     let payload = {
       'Message': chatInputValue,
@@ -144,6 +187,9 @@ document.addEventListener("DOMContentLoaded", function () {
       
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
+
+    fileUpload.removeEventListener('input', fileUploadOnChange);
+    fileUpload.addEventListener('input', fileUploadOnChange);
   });
 
   chatbotToggle.addEventListener("click", function () {
@@ -159,47 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chatbotCloseToggle.classList.toggle("hidden");
   });
 
-  async function fileUploadOnChange(event) {
-    // Remove existing previews
-    if (previewContainer.childNodes.length > 0) {
-      for (const node of previewContainer.childNodes) {
-        previewContainer.removeChild(node);
-      }
-    }
-
-    // Remove existing files
-    if (fileUpload.files !== null) {
-      fileUpload.files = null;
-    }
-
-    const previewElement = document.createElement('div');
-    const name = document.createElement('span');
-    const thumbnail = document.createElement('img');
-    const deleteButton = document.createElement('button');
-    const xIcon = document.getElementById("lucide-x").cloneNode(true);
-    deleteButton.appendChild(xIcon);
-
-    var reader = new FileReader();
-    reader.onload = function () {
-      thumbnail.src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-
-    name.textContent = event.target.files[0].name;
-    previewElement.appendChild(thumbnail);
-    previewElement.appendChild(name);
-    previewElement.appendChild(deleteButton);
-    previewContainer.appendChild(previewElement);
-    deleteButton.addEventListener('click', function () {
-      previewContainer.removeChild(previewElement);
-      fileUpload.files = null;
-      fileUpload.addEventListener('input', fileUploadOnChange);
-    });
-
-    let container = new DataTransfer();
-    container.items.add(event.target.files[0]);
-    fileUpload.files = container.files;
-  };
+  
 
   fileUpload.addEventListener("input", fileUploadOnChange);
 });
