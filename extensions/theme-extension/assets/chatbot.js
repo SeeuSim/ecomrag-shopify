@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatbotCloseToggle = document.getElementById("chatbot-close-toggle");
   const closeIcon = document.getElementById("close-icon");
   const fileUpload = document.getElementById('file-upload');
+  const previewContainer = document.getElementById('upload-preview-container');
 
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ...payload,
         'Image': imagePart
       };
-    } 
+    }
 
     // add input to chat window and disable input
     const userInput = document.createTextNode(chatInputValue);
@@ -157,4 +158,33 @@ document.addEventListener("DOMContentLoaded", function () {
     chatbotOpenToggle.classList.toggle("hidden");
     chatbotCloseToggle.classList.toggle("hidden");
   });
+
+  async function fileUploadOnChange(event) {
+    console.log('triggering');
+    const previewElement = document.createElement('div');
+    const name = document.createElement('span');
+    const thumbnail = document.createElement('img');
+    const deleteButton = document.createElement('button');
+    const xIcon = document.getElementById("lucide-x").cloneNode(true);
+    deleteButton.appendChild(xIcon);
+
+    var reader = new FileReader();
+    reader.onload = function () {
+      thumbnail.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    name.textContent = event.target.files[0].name;
+    previewElement.appendChild(thumbnail);
+    previewElement.appendChild(name);
+    previewElement.appendChild(deleteButton);
+    previewContainer.appendChild(previewElement);
+    deleteButton.addEventListener('click', function () {
+      previewContainer.removeChild(previewElement);
+      fileUpload.value = null;
+      fileUpload.addEventListener('input', fileUploadOnChange);
+    });
+  };
+
+  fileUpload.addEventListener("input", fileUploadOnChange);
 });
