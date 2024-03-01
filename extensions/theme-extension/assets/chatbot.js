@@ -160,7 +160,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   async function fileUploadOnChange(event) {
-    console.log('triggering');
+    // Remove existing previews
+    if (previewContainer.childNodes.length > 0) {
+      for (const node of previewContainer.childNodes) {
+        previewContainer.removeChild(node);
+      }
+    }
+
+    // Remove existing files
+    if (fileUpload.files !== null) {
+      fileUpload.files = null;
+    }
+
     const previewElement = document.createElement('div');
     const name = document.createElement('span');
     const thumbnail = document.createElement('img');
@@ -181,9 +192,13 @@ document.addEventListener("DOMContentLoaded", function () {
     previewContainer.appendChild(previewElement);
     deleteButton.addEventListener('click', function () {
       previewContainer.removeChild(previewElement);
-      fileUpload.value = null;
+      fileUpload.files = null;
       fileUpload.addEventListener('input', fileUploadOnChange);
     });
+
+    let container = new DataTransfer();
+    container.items.add(event.target.files[0]);
+    fileUpload.files = container.files;
   };
 
   fileUpload.addEventListener("input", fileUploadOnChange);
