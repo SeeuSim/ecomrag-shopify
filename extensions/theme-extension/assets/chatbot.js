@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const previewContainer = document.getElementById('upload-preview-container');
 
   async function fileUploadOnChange(event) {
-    // Remove existing previews
+    // Remove existing previews and styles
     if (previewContainer.childNodes.length > 0) {
       for (const node of previewContainer.childNodes) {
         previewContainer.removeChild(node);
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const previewElement = document.createElement('div');
     const name = document.createElement('span');
     const thumbnail = document.createElement('img');
-    const deleteButton = document.createElement('label');
+    const deleteButton = document.createElement('div');
     const xIcon = document.getElementById("lucide-x").cloneNode(true);
     deleteButton.appendChild(xIcon);
 
@@ -47,14 +47,23 @@ document.addEventListener("DOMContentLoaded", function () {
     previewElement.appendChild(name);
     previewElement.appendChild(deleteButton);
     previewContainer.appendChild(previewElement);
+
+    // Add top margin
+    chatForm.style.marginTop = '50px';
+
+    // Delete file
     deleteButton.addEventListener('click', function (event) {
-      console.log('deleting node');
       event.preventDefault();
       previewContainer.removeChild(previewElement);
+      chatForm.style.removeProperty('marginTop');
+
       fileUpload.files = null;
+      
+      // Reattach event listener
       fileUpload.addEventListener('input', fileUploadOnChange);
     });
 
+    // File content
     let container = new DataTransfer();
     container.items.add(event.target.files[0]);
     fileUpload.files = container.files;
@@ -73,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         previewContainer.removeChild(node);
       }
     }
+    chatForm.style.removeProperty('margin-top');
 
     // get user-inputted message
     const chatInputValue = chatInput.value;
