@@ -22,18 +22,41 @@ document.addEventListener("DOMContentLoaded", function () {
     chatInput.toggleAttribute("disabled");
     chatButton.toggleAttribute("disabled");
 
-    const formData = new FormData();
-  
+    // const formData = new FormData();
+    
     // get user-inputted message
     const chatInputValue = chatInput.value;
     chatInput.value = "";
-
-    formData.append("message", chatInputValue); 
-
-    const file = fileUpload.files[0];  
-    if (file) {
-      formData.append("image", file);
+    // formData.append("message", chatInputValue); 
+    
+    // const file = fileUpload.files[0];
+    // if (file) {
+    //   formData.append("image", file);
+    // }
+    
+    let payload = {
+      'Message': chatInputValue,
     }
+
+    const toBase64 = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+
+    if (fileUpload.files && fileUpload.files.length > 0) {
+      let imageFile = fileUpload.files[0];
+      let imagePart = {
+        'FileName': imageFile.name,
+        'FileType': imageFile.type,
+        'FileContent': await toBase64(imageFile)
+      };
+      payload = {
+        ...payload,
+        'Image': imagePart
+      };
+    } 
 
     // add input to chat window and disable input
     const userInput = document.createTextNode(chatInputValue);
@@ -59,11 +82,13 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // call Gadget /chat HTTP route with stream option
     let response;
-    console.log(formData);
     try {
       response = await chatbotApi.fetch("/chat", {
         method: "POST",
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
         stream: true,
       });
   
