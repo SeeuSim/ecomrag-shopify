@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // initialize an API client object
   const chatbotApi = new Gadget();
+  console.log("SHOPID", shopId);
 
   // dom elements for chatbot
   const chatbotWindow = document.getElementById("chatbot-window");
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeIcon = document.getElementById("close-icon");
   const fileUpload = document.getElementById("file-upload");
   const previewContainer = document.getElementById("upload-preview-container");
+  const introductionElement = document.getElementById("introduction-text");
 
   async function fileUploadOnChange(event) {
     // Remove existing previews and styles
@@ -69,21 +71,26 @@ document.addEventListener("DOMContentLoaded", function () {
     fileUpload.files = container.files;
     document.getElementById("chat-input").focus();
   }
-  const chatHeaderTitle = document.getElementsByClassName("chat-header-title");
+  const chatHeaderTitle = document.getElementById("chat-header-title");
 
-  async function fetchHelloData() {
+  async function fetchChatBotSettingsData() {
     try {
-      const response = await chatbotApi.fetch("/hello", {
+      const url = `/chatbotSettings?shopId=${shopId}`; // Add shopId as a query parameter
+
+      const response = await chatbotApi.fetch(url, {
         method: "GET",
       });
-      const data = await response.text();
-      chatHeaderTitle.innerHTML = data; // Assuming the response is text
+      const data = await response.json();
+      console.log(data);
+
+      chatHeaderTitle.textContent = data["name"]; // Assuming the response is text
+      introductionElement.textContent = data["introductionMessage"];
     } catch (error) {
       console.error("Error fetching hello data:", error);
     }
   }
 
-  fetchHelloData();
+  fetchChatBotSettingsData();
 
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
@@ -105,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let payload = {
       Message: chatInputValue,
+      shopId: shopId,
     };
 
     const toBase64 = (file) =>
