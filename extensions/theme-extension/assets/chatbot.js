@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatbotOpenToggle = document.getElementById("chatbot-open-toggle");
   const chatbotCloseToggle = document.getElementById("chatbot-close-toggle");
   const closeIcon = document.getElementById("close-icon");
-  const fileUpload = document.getElementById('file-upload');
-  const previewContainer = document.getElementById('upload-preview-container');
+  const fileUpload = document.getElementById("file-upload");
+  const previewContainer = document.getElementById("upload-preview-container");
 
   async function fileUploadOnChange(event) {
     // Remove existing previews and styles
@@ -29,10 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
       fileUpload.files = null;
     }
 
-    const previewElement = document.createElement('div');
-    const name = document.createElement('span');
-    const thumbnail = document.createElement('img');
-    const deleteButton = document.createElement('div');
+    const previewElement = document.createElement("div");
+    const name = document.createElement("span");
+    const thumbnail = document.createElement("img");
+    const deleteButton = document.createElement("div");
     const xIcon = document.getElementById("lucide-x").cloneNode(true);
     deleteButton.appendChild(xIcon);
 
@@ -49,26 +49,41 @@ document.addEventListener("DOMContentLoaded", function () {
     previewContainer.appendChild(previewElement);
 
     // Add top margin
-    chatForm.style.marginTop = '50px';
+    chatForm.style.marginTop = "50px";
 
     // Delete file
-    deleteButton.addEventListener('click', function (event) {
+    deleteButton.addEventListener("click", function (event) {
       event.preventDefault();
       previewContainer.removeChild(previewElement);
-      chatForm.style.removeProperty('marginTop');
+      chatForm.style.removeProperty("marginTop");
 
       fileUpload.files = null;
-      
+
       // Reattach event listener
-      fileUpload.addEventListener('input', fileUploadOnChange);
+      fileUpload.addEventListener("input", fileUploadOnChange);
     });
 
     // File content
     let container = new DataTransfer();
     container.items.add(event.target.files[0]);
     fileUpload.files = container.files;
-    document.getElementById('chat-input').focus();
-  };
+    document.getElementById("chat-input").focus();
+  }
+  const chatHeaderTitle = document.getElementsByClassName("chat-header-title");
+
+  async function fetchHelloData() {
+    try {
+      const response = await chatbotApi.fetch("/hello", {
+        method: "GET",
+      });
+      const data = await response.text();
+      chatHeaderTitle.innerHTML = data; // Assuming the response is text
+    } catch (error) {
+      console.error("Error fetching hello data:", error);
+    }
+  }
+
+  fetchHelloData();
 
   // fired when the chat form is submitted
   chatForm.addEventListener("submit", async function (event) {
@@ -82,33 +97,34 @@ document.addEventListener("DOMContentLoaded", function () {
         previewContainer.removeChild(node);
       }
     }
-    chatForm.style.removeProperty('margin-top');
+    chatForm.style.removeProperty("margin-top");
 
     // get user-inputted message
     const chatInputValue = chatInput.value;
     chatInput.value = "";
-    
-    let payload = {
-      'Message': chatInputValue,
-    }
 
-    const toBase64 = (file) => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-    });
+    let payload = {
+      Message: chatInputValue,
+    };
+
+    const toBase64 = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
 
     if (fileUpload.files && fileUpload.files.length > 0) {
       let imageFile = fileUpload.files[0];
       let imagePart = {
-        'FileName': imageFile.name,
-        'FileType': imageFile.type,
-        'FileContent': await toBase64(imageFile)
+        FileName: imageFile.name,
+        FileType: imageFile.type,
+        FileContent: await toBase64(imageFile),
       };
       payload = {
         ...payload,
-        'Image': imagePart
+        Image: imagePart,
       };
     }
 
@@ -125,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chat.appendChild(chatbotResponse);
 
     // add DOM elements for "thinking" indicator
-    const chatWindow = document.getElementById('chat');
+    const chatWindow = document.getElementById("chat");
     const chatbotThinking = document.createElement("p");
     const chatbotThinkingText = document.createTextNode(
       "Finding the most suited product..."
@@ -133,29 +149,29 @@ document.addEventListener("DOMContentLoaded", function () {
     chatbotThinking.appendChild(chatbotThinkingText);
     chat.appendChild(chatbotThinking);
     chatWindow.scrollTop = chatWindow.scrollHeight;
-    
+
     // call Gadget /chat HTTP route with stream option
     let response;
     try {
       response = await chatbotApi.fetch("/chat", {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
         stream: true,
       });
-  
+
       if (response.ok) {
         // Handle successful submission here
-        console.log('Message and file sent successfully');
+        console.log("Message and file sent successfully");
       } else {
         // Handle server errors or invalid responses here
-        console.error('Failed to send message and file');
+        console.error("Failed to send message and file");
       }
     } catch (error) {
       // Handle network or unexpected errors here
-      console.error('Error sending message and file:', error);
+      console.error("Error sending message and file:", error);
     }
 
     // read from the returned stream
@@ -194,12 +210,12 @@ document.addEventListener("DOMContentLoaded", function () {
       replyText += value;
       // use DOMPurify to sanitize the response before adding to the DOM
       chatbotResponse.innerHTML = DOMPurify.sanitize(replyText);
-      
+
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    fileUpload.removeEventListener('input', fileUploadOnChange);
-    fileUpload.addEventListener('input', fileUploadOnChange);
+    fileUpload.removeEventListener("input", fileUploadOnChange);
+    fileUpload.addEventListener("input", fileUploadOnChange);
   });
 
   chatbotToggle.addEventListener("click", function () {
@@ -214,8 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
     chatbotOpenToggle.classList.toggle("hidden");
     chatbotCloseToggle.classList.toggle("hidden");
   });
-
-  
 
   fileUpload.addEventListener("input", fileUploadOnChange);
 });
