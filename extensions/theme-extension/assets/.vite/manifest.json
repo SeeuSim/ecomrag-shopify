@@ -1,0 +1,10 @@
+{
+  "frontend/entrypoint/theme.tsx": {
+    "file": "theme-BWj2XMSp.js",
+    "src": "frontend/entrypoint/theme.tsx",
+    "isEntry": true,
+    "css": [
+      "theme-NIzlSaBg.css"
+    ]
+  }
+}

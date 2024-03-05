@@ -2,17 +2,28 @@
   "name": "chatbot",
   "version": "1.0.0",
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
+    "dev": "run-p -sr vite:dev shopify:dev",
+    "build": "run-s vite:build shopify:build",
+    "deploy": "run-s vite:build cleanup shopify:deploy",
     "shopify": "shopify",
-    "build": "shopify app build",
-    "dev": "shopify app dev",
+    "shopify:build": "shopify app build",
+    "shopify:dev": "shopify app dev",
+    "shopify:info": "shopify app info",
+    "shopify:generate": "shopify app generate",
+    "shopify:deploy": "shopify app deploy",
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "cleanup": "rimraf --glob extensions/*/assets/*.{json,geetkeep}",
     "info": "shopify app info",
-    "generate": "shopify app generate",
-    "deploy": "shopify app deploy"
+    "generate": "shopify app generate"
   },
   "dependencies": {
     "@shopify/app": "3.53.0",
-    "@shopify/cli": "3.53.0"
+    "@shopify/cli": "3.53.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "lucide-react": "^0.344.0"
   },
   "trustedDependencies": [
     "@shopify/plugin-cloudflare"
@@ -20,6 +31,16 @@
   "author": "gadget",
   "private": true,
   "workspaces": [
+    "frontend",
     "extensions/*"
-  ]
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.18",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.35",
+    "rimraf": "^5.0.5",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.5",
+    "vite-plugin-shopify": "^3.0.1"
+  }
 }

@@ -1,4 +1,4 @@
-<script src="https://ecomrag--development.gadget.app/api/client/web.min.js" defer="defer"></script>
+{% comment %} <script src="https://ecomrag--development.gadget.app/api/client/web.min.js" defer="defer"></script>
 <script src="{{ 'purify.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'chatbot.js' | asset_url }}" defer="defer"></script>
 <script>
@@ -125,7 +125,21 @@
       </g>
     </svg>
   </button>
-</form></div>{% schema %}
+</form></div> {% endcomment %}
+<div id="root">
+  {% liquid
+    # Relative to entrypointsDir
+    render 'vite-tag' with 'theme.css'
+    render 'vite-tag' with 'theme.tsx'
+  %}
+</div>
+
+<script>
+  const home = {{ request.path | json }}
+  var shopId = {{ shop.id | json }};
+</script>
+
+{% schema %}
 {
   "name": "Gadget chatbot",
   "target": "body",
