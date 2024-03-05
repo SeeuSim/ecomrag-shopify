@@ -17,13 +17,21 @@
     "vite:build": "vite build",
     "cleanup": "rimraf --glob extensions/*/assets/*.{json,geetkeep}",
     "info": "shopify app info",
-    "generate": "shopify app generate"
+    "generate": "shopify app generate",
+    "fmt": "prettier --config ./.prettierrc \"./frontend/**/*.jsx\" --write"
   },
   "dependencies": {
-    "@shopify/app": "3.53.0",
-    "@shopify/cli": "3.53.0",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@shopify/app": "^3.56.3",
+    "@shopify/cli": "^3.56.3",
     "@vitejs/plugin-react": "^4.2.1",
-    "lucide-react": "^0.344.0"
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss-animate": "^1.0.7"
   },
   "trustedDependencies": [
     "@shopify/plugin-cloudflare"
@@ -38,6 +46,9 @@
     "autoprefixer": "^10.4.18",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "rimraf": "^5.0.5",
     "tailwindcss": "^3.4.1",
     "vite": "^5.1.5",

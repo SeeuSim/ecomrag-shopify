@@ -11,7 +11,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      input: './frontend/entrypoint/theme.tsx'
+      input: './frontend/entrypoints/theme.tsx'
     },
     outDir: 'extensions/theme-extension/assets'
   }
