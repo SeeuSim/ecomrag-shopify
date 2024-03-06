@@ -1,7 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export const Toggle: React.FC = () => {
@@ -16,10 +15,11 @@ export const Toggle: React.FC = () => {
     if (imgSrcActual && imgSrcActual.length > 0) {
       setImgSrc(imgSrcActual);
     }
+    console.log();
   }, []);
 
   return (
-    <Button
+    <div
       className={cn(
         'z-[1050] h-20 w-20 cursor-pointer',
         'items-center justify-center rounded-full',
@@ -33,6 +33,6 @@ export const Toggle: React.FC = () => {
       ) : (
         <Loader2 className='animate-spin' />
       )}
-    </Button>
+    </div>
   );
 };

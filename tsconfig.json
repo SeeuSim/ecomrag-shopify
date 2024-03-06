@@ -24,7 +24,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./frontend/*"]
-    }
+    },
+
+    /* Gadget API */
+    "typeRoots": [
+      "node_modules/@gadget-client/ecomrag/types.d.ts"
+    ]
   },
   "include": ["frontend"],
   "references": [{ "path": "./tsconfig.node.json" }]

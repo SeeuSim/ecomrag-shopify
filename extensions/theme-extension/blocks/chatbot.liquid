@@ -1,7 +1,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+<script lang='js'>
+  var shopId = {{ shop.id | json }};
+  if (typeof Storage !== undefined) {
+    sessionStorage.setItem('shop-id', shopId);
+  }
+</script>
 {% liquid
   # Relative to entrypointsDir
   render 'vite-tag' with 'theme.css'

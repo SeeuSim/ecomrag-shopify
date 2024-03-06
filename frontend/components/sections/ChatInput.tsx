@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadIcon } from '@radix-ui/react-icons';
-import { Send } from 'lucide-react';
+import { Loader2, Send } from 'lucide-react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ChatMessagesContext, formSchema } from './utils';
+import api from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { useContext, useState } from 'react';
+import { ChatMessagesContext, formSchema } from './utils';
 
 const ChatInput = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +22,7 @@ const ChatInput = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     form.reset();
     if (setMessages) {
@@ -33,7 +34,71 @@ const ChatInput = () => {
         },
       ]);
     }
-    
+
+    let payload: {
+      Message: string;
+      ShopId: string;
+      Image?: { FileName: string; FileType: string; FileContent: unknown };
+    } = {
+      Message: values.message,
+      ShopId: sessionStorage.getItem('shop-id')!,
+    };
+
+    const toBase64 = (file: File) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+
+    if (values.image) {
+      let imagePart = {
+        FileName: values.image.name,
+        FileType: values.image.type,
+        FileContent: await toBase64(values.image),
+      };
+      payload = { ...payload, Image: imagePart };
+    }
+
+    const response: Response = await api.fetch('/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      setIsSubmitting(false);
+      // TODO: handle
+      return;
+    }
+
+    const decodedStreamReader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
+
+    decodedStreamReader.closed.catch((error) => {
+      // TODO: handle
+    });
+
+    let { value, done } = await decodedStreamReader.read();
+    setMessages!((messages) => [...messages, { role: 'system', content: value! }]);
+    while (!done) {
+      const { value: newValue, done: newIsDone } = await decodedStreamReader.read();
+      value = newValue;
+      done = newIsDone;
+      if (newValue) {
+        setMessages!((messages) =>
+          messages.map((message, index) => {
+            if (index < messages.length - 1) {
+              return message;
+            }
+            return { ...message, content: message.content + newValue };
+          })
+        );
+      }
+    }
+
     setIsSubmitting(false);
   };
 
@@ -75,7 +140,11 @@ const ChatInput = () => {
           type='submit'
           disabled={isSubmitting}
         >
-          <Send className='h-6 w-6 ' />
+          {isSubmitting ? (
+            <Loader2 className='h-6 w-6 animate-spin' />
+          ) : (
+            <Send className='h-6 w-6 ' />
+          )}
         </Button>
       </form>
     </Form>

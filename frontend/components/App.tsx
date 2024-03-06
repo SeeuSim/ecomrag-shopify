@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import api from '../lib/api';
+import { Provider } from '@gadgetinc/react';
+
 import { Toggle } from '@/components/buttons/Toggle';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
@@ -20,37 +23,39 @@ const App: React.FC<{}> = () => {
   const [messages, setMessages] = useState([initialMessage]);
 
   return (
-    <div className='fixed bottom-5 right-5 z-[1000]'>
-      <Popover open={open} onOpenChange={setIsOpen}>
-        <PopoverTrigger
-          // asChild
-          className='focus:ring-0 focus:ring-transparent focus:ring-offset-0 focus:ring-offset-transparent'
-        >
-          <Toggle />
-        </PopoverTrigger>
-        <PopoverContent
-          side='top'
-          id='chat-window'
-          className={cn(
-            'z-[1100] translate-x-[-24px] translate-y-[44px]',
-            'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-            'max-h-[90dvh] min-h-[550px] min-w-[450px] max-w-[90dvw]',
-            'flex flex-col'
-          )}
-        >
-          <ChatMessagesContext.Provider value={{ messages, setMessages }}>
-            <div id='chat-container' className='flex flex-col overflow-y-scroll'>
-              <ChatHeader
-                onClick={() => setIsOpen((_open) => !_open)}
-                resetMessages={() => setMessages([initialMessage])}
-              />
-              <ChatMessages />
-            </div>
-            <ChatInput />
-          </ChatMessagesContext.Provider>
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Provider api={api}>
+      <div className='fixed bottom-5 right-5 z-[1000]'>
+        <Popover open={open} onOpenChange={setIsOpen}>
+          <PopoverTrigger
+            // asChild
+            className='focus:ring-0 focus:ring-transparent focus:ring-offset-0 focus:ring-offset-transparent'
+          >
+            <Toggle />
+          </PopoverTrigger>
+          <PopoverContent
+            side='top'
+            id='chat-window'
+            className={cn(
+              'z-[1100] translate-x-[-24px] translate-y-[44px]',
+              'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
+              'max-h-[90dvh] min-h-[550px] min-w-[450px] max-w-[90dvw]',
+              'flex flex-col'
+            )}
+          >
+            <ChatMessagesContext.Provider value={{ messages, setMessages }}>
+              <div id='chat-container' className='flex flex-col overflow-y-scroll'>
+                <ChatHeader
+                  onClick={() => setIsOpen((_open) => !_open)}
+                  resetMessages={() => setMessages([initialMessage])}
+                />
+                <ChatMessages />
+              </div>
+              <ChatInput />
+            </ChatMessagesContext.Provider>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </Provider>
   );
 };
 

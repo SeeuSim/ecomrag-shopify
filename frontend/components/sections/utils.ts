@@ -13,5 +13,5 @@ interface ChatMessageState {
 }
 
 export const ChatMessagesContext = React.createContext<ChatMessageState>({
-  messages: []
+    messages: []
 });
