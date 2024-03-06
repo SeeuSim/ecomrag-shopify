@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+
 import { Toggle } from '@/components/buttons/Toggle';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { Cross1Icon, UploadIcon } from '@radix-ui/react-icons';
-import { Send } from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { ScrollArea } from './ui/scroll-area';
+
+import ChatHeader from './sections/ChatHeader';
+import ChatInput from './sections/ChatInput';
+import ChatMessages from './sections/ChatMessages';
 
 const App: React.FC<{}> = () => {
   const [open, setIsOpen] = useState(false);
+  const [top, setTop] = useState(0);
+
+  useLayoutEffect(() => {
+    var node = document.getElementById('chat-container');
+    const listener = () => setTop(node?.scrollTop!);
+    node?.addEventListener('scroll', listener);
+    return () => node?.removeEventListener('scroll', listener);
+  }, []);
+
   return (
     <div className='fixed bottom-5 right-5 z-[1000]'>
       <Popover open={open} onOpenChange={setIsOpen}>
@@ -21,36 +30,19 @@ const App: React.FC<{}> = () => {
         </PopoverTrigger>
         <PopoverContent
           side='top'
+          id='chat-window'
           className={cn(
             'z-[1100] translate-x-[-24px] translate-y-[44px]',
-            'overflow-clip rounded-lg border-0 bg-card p-0 text-card-foreground shadow',
+            'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
             'max-h-[90dvh] min-h-[550px] min-w-[450px] max-w-[90dvw]',
             'flex flex-col'
           )}
         >
-          <div className='inline-flex w-full items-center justify-between bg-primary px-6 py-4 text-primary-foreground'>
-            <span>Header</span>
-            <Button
-              variant='ghost'
-              className='h-10 w-10 p-2 hover:text-primary'
-              onClick={() => setIsOpen((_open) => !_open)}
-            >
-              <Cross1Icon />
-            </Button>
+          <div id='chat-container' className='flex flex-col overflow-y-scroll'>
+            <ChatHeader top={top} onClick={() => setIsOpen((_open) => !_open)} />
+            <ChatMessages />
           </div>
-          <ScrollArea className='h-[calc(100%-44px)]' />
-          <div className='mt-auto inline-flex w-full items-center justify-between gap-4 border-t border-border p-6'>
-            <Button
-              variant='secondary'
-              className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'
-            >
-              <UploadIcon className='h-6 w-6 ' />
-            </Button>
-            <Input type='text' className='flex h-[36px] rounded-lg text-2xl' />
-            <Button className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'>
-              <Send className='h-6 w-6 ' />
-            </Button>
-          </div>
+          <ChatInput />
         </PopoverContent>
       </Popover>
     </div>
