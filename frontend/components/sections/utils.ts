@@ -7,6 +7,16 @@ export const formSchema = z.object({
   image: z.instanceof(File).optional(),
 });
 
+export function formatFileSize(bytes: number) {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
 interface ChatMessageState {
   messages: Array<MessageProps>
   setMessages?: React.Dispatch<React.SetStateAction<Array<MessageProps>>> 

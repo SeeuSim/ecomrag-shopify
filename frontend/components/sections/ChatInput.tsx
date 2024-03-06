@@ -1,26 +1,32 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadIcon } from '@radix-ui/react-icons';
-import { Loader2, Send } from 'lucide-react';
-import { useContext, useState } from 'react';
+import { Loader2, Send, X } from 'lucide-react';
+import { useContext, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { ChatMessagesContext, formSchema } from './utils';
+import { ChatMessagesContext, formSchema, formatFileSize } from './utils';
 
 const ChatInput = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
   const { setMessages } = useContext(ChatMessagesContext);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       message: '',
     },
   });
+
+  const image = form.watch('image');
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
@@ -77,7 +83,7 @@ const ChatInput = () => {
 
     const decodedStreamReader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
 
-    decodedStreamReader.closed.catch((error) => {
+    decodedStreamReader.closed.catch((_error) => {
       // TODO: handle
     });
 
@@ -106,46 +112,101 @@ const ChatInput = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='mt-auto inline-flex w-full items-center justify-between gap-4 border-t border-border p-6'
+        className='mt-auto flex w-full flex-col gap-4 border-t border-border p-6 pt-4'
       >
-        <Button
-          variant='secondary'
-          className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'
-          disabled={isSubmitting}
-        >
-          <UploadIcon className='h-6 w-6 ' />
-        </Button>
-        <FormField
-          control={form.control}
-          name='message'
-          render={({ field, fieldState }) => (
-            <FormItem className='w-full'>
-              <FormControl>
-                <Input
-                  type='text'
-                  placeholder='Type your message...'
-                  disabled={isSubmitting}
-                  className={cn(
-                    'flex h-[36px] w-full rounded-lg text-2xl',
-                    fieldState.error && 'ring-1 ring-destructive'
-                  )}
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button
-          className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'
-          type='submit'
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <Loader2 className='h-6 w-6 animate-spin' />
-          ) : (
-            <Send className='h-6 w-6 ' />
-          )}
-        </Button>
+        {image && (
+          <div className='flex w-full'>
+            <div
+              className={cn(
+                buttonVariants({ variant: 'outline' }),
+                'inline-flex h-[4.5rem] gap-4 p-2 hover:bg-inherit'
+              )}
+            >
+              <div className='flex h-[30px] w-[30px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
+                <img src={previewImage} className='object-cover' />
+              </div>
+              <span className='text-2xl font-light'>{image.name}</span>
+              <span className='ml-2 text-xl font-normal'>{formatFileSize(image.size)}</span>
+              <div
+                className={cn(
+                  buttonVariants({ variant: 'ghost' }),
+                  'flex-shrink-0 flex-grow-0 border p-1 hover:scale-105 hover:bg-secondary'
+                )}
+                onClick={() => {
+                  form.setValue('image', undefined);
+                }}
+              >
+                <X className='h-7 w-7' />
+              </div>
+            </div>
+          </div>
+        )}
+        <div className='inline-flex w-full items-center justify-between gap-4'>
+          <FormField
+            control={form.control}
+            name='image'
+            render={({ field: _field }) => (
+              <FormItem>
+                <FormControl>
+                  <FormLabel
+                    htmlFor='file-upload'
+                    className='inline-flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 place-content-center items-center justify-center whitespace-nowrap rounded-lg bg-secondary p-2 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover:cursor-pointer hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
+                  >
+                    <UploadIcon className='h-6 w-6 ' />
+                    <Input
+                      ref={fileInputRef}
+                      id='file-upload'
+                      type='file'
+                      accept='image/*'
+                      onInput={(event) => {
+                        if (event.currentTarget.files && event.currentTarget.files.length > 0) {
+                          form.setValue('image', event.currentTarget.files[0]);
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            setPreviewImage(reader.result as string);
+                          };
+                          reader.readAsDataURL(event.currentTarget.files[0]);
+                        }
+                      }}
+                      className='hidden'
+                    />
+                  </FormLabel>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='message'
+            render={({ field, fieldState }) => (
+              <FormItem className='w-full'>
+                <FormControl>
+                  <Input
+                    type='text'
+                    placeholder='Type your message...'
+                    disabled={isSubmitting}
+                    className={cn(
+                      'flex h-[36px] w-full rounded-lg text-2xl',
+                      fieldState.error && 'ring-1 ring-destructive'
+                    )}
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button
+            className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'
+            type='submit'
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <Loader2 className='h-6 w-6 animate-spin' />
+            ) : (
+              <Send className='h-6 w-6 ' />
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );
