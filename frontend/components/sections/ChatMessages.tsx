@@ -1,23 +1,31 @@
-import { type MessageProps, Message } from '@/components/sections/chat/Message';
+import { useContext, useEffect, useRef } from 'react';
+
+import { Message } from '@/components/sections/chat/Message';
+import { ChatMessagesContext } from './utils';
 
 const ChatMessages = () => {
-  const messages: Array<MessageProps> = [
-    {
-      role: 'system',
-      content: `Hello! Feel free to ask any questions based on your needs! Such as a Y2K fit or looking like a specific celebrity. I'm here to help you find the perfect outfit!`,
-    },
-    {
-      role: 'user',
-      content: 'I want something spicy.',
-    },
-  ];
+  const { messages } = useContext(ChatMessagesContext);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, lastMessageRef]);
+
   return (
-    <div className='z-10 flex w-full -translate-y-20 flex-col gap-5 border-t-[5rem] border-primary p-5'>
-      {Array.apply(null, Array(10))
-        .flatMap((_) => messages)
-        .map((element, index) => (
-          <Message key={index} {...element} />
-        ))}
+    <div
+      id='chat-messages'
+      className='z-10 flex w-full flex-col gap-5 border-t-[45px] border-primary p-5'
+    >
+      {messages.map((element, index) => (
+        <Message
+          key={index}
+          ref={index === messages.length - 1 ? lastMessageRef : null}
+          {...element}
+        />
+      ))}
+      <div id='last-message' className='' />
     </div>
   );
 };

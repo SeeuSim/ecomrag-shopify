@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Toggle } from '@/components/buttons/Toggle';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -7,9 +7,17 @@ import { cn } from '@/lib/utils';
 import ChatHeader from './sections/ChatHeader';
 import ChatInput from './sections/ChatInput';
 import ChatMessages from './sections/ChatMessages';
+import { ChatMessagesContext } from './sections/utils';
+import { MessageProps } from './sections/chat/Message';
+
+const initialMessage: MessageProps = {
+  role: 'system',
+  content: `Hello! Feel free to ask any questions based on your needs! Such as a Y2K fit or looking like a specific celebrity. I'm here to help you find the perfect outfit!`,
+};
 
 const App: React.FC<{}> = () => {
   const [open, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([initialMessage]);
 
   return (
     <div className='fixed bottom-5 right-5 z-[1000]'>
@@ -30,11 +38,16 @@ const App: React.FC<{}> = () => {
             'flex flex-col'
           )}
         >
-          <div id='chat-container' className='flex flex-col overflow-y-scroll'>
-            <ChatHeader onClick={() => setIsOpen((_open) => !_open)} />
-            <ChatMessages />
-          </div>
-          <ChatInput />
+          <ChatMessagesContext.Provider value={{ messages, setMessages }}>
+            <div id='chat-container' className='flex flex-col overflow-y-scroll'>
+              <ChatHeader
+                onClick={() => setIsOpen((_open) => !_open)}
+                resetMessages={() => setMessages([initialMessage])}
+              />
+              <ChatMessages />
+            </div>
+            <ChatInput />
+          </ChatMessagesContext.Provider>
         </PopoverContent>
       </Popover>
     </div>

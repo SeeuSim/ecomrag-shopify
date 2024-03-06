@@ -1,15 +1,16 @@
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
-export type MessageProps = {
+export type MessageProps = ButtonHTMLAttributes<HTMLDivElement> &  {
   content: string;
   role: 'system' | 'user';
 };
 
-export const Message: React.FC<MessageProps> = ({ content, role }) => {
+export const Message = React.forwardRef<HTMLDivElement, MessageProps>(({ content, role }, ref) => {
   return (
     <Card
+      ref={ref}
       className={cn(
         'max-w-[80%] p-5 text-xl',
         role == 'system'
@@ -20,4 +21,4 @@ export const Message: React.FC<MessageProps> = ({ content, role }) => {
       <span>{content}</span>
     </Card>
   );
-};
+});
