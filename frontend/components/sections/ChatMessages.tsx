@@ -12,13 +12,12 @@ const ChatMessages = () => {
     },
   ];
   return (
-    <div className='flex w-full flex-col gap-5 p-5'>
+    <div className='z-10 flex w-full -translate-y-20 flex-col gap-5 border-t-[5rem] border-primary p-5'>
       {Array.apply(null, Array(10))
         .flatMap((_) => messages)
         .map((element, index) => (
           <Message key={index} {...element} />
         ))}
-      {/* <div className='h-5 w-full flex-shrink-0' /> */}
     </div>
   );
 };

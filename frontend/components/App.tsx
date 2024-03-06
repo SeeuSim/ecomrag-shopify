@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { Toggle } from '@/components/buttons/Toggle';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -10,14 +10,6 @@ import ChatMessages from './sections/ChatMessages';
 
 const App: React.FC<{}> = () => {
   const [open, setIsOpen] = useState(false);
-  const [top, setTop] = useState(0);
-
-  useLayoutEffect(() => {
-    var node = document.getElementById('chat-container');
-    const listener = () => setTop(node?.scrollTop!);
-    node?.addEventListener('scroll', listener);
-    return () => node?.removeEventListener('scroll', listener);
-  }, []);
 
   return (
     <div className='fixed bottom-5 right-5 z-[1000]'>
@@ -39,7 +31,7 @@ const App: React.FC<{}> = () => {
           )}
         >
           <div id='chat-container' className='flex flex-col overflow-y-scroll'>
-            <ChatHeader top={top} onClick={() => setIsOpen((_open) => !_open)} />
+            <ChatHeader onClick={() => setIsOpen((_open) => !_open)} />
             <ChatMessages />
           </div>
           <ChatInput />
