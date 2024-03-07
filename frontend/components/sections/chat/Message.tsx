@@ -9,9 +9,6 @@ export type MessageProps = ButtonHTMLAttributes<HTMLDivElement> & {
   role: 'system' | 'user';
 };
 
-/**
- * react-katex    react-markdown    react-syntax-highlighter    rehype-katex    remark-gfm    remark-math
- */
 export const Message = React.forwardRef<HTMLDivElement, MessageProps>(({ content, role }, ref) => {
   return (
     <Card
@@ -31,7 +28,7 @@ export const Message = React.forwardRef<HTMLDivElement, MessageProps>(({ content
             'prose-a:text-blue-500'
           )}
         >
-          {content.replaceAll('<br />', '\n\n')}
+          {content}
         </MarkdownComponent>
       </CardContent>
     </Card>

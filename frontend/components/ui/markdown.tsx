@@ -1,12 +1,14 @@
-import 'katex/dist/katex.min.css';
 import { CopyIcon } from 'lucide-react';
 import React from 'react';
+
+import 'katex/dist/katex.min.css';
 import Markdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import rehypeRaw from 'rehype-raw';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -17,7 +19,7 @@ export const MarkdownComponent = React.forwardRef<HTMLDivElement, Props>(
   ({ children, className }, _ref) => {
     return (
       <Markdown
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[rehypeKatex, rehypeRaw]}
         remarkPlugins={[remarkMath, remarkGfm]}
         className={cn('', className)}
         components={{
