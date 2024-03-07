@@ -14,7 +14,7 @@ import { ChatMessagesContext, formSchema, formatFileSize } from './utils';
 
 const ChatInput = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImageSrc, setPreviewImageSrc] = useState('');
   const { setMessages } = useContext(ChatMessagesContext);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,15 +31,13 @@ const ChatInput = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     form.reset();
-    if (setMessages) {
-      setMessages((initial) => [
-        ...initial,
-        {
-          role: 'user',
-          content: values.message,
-        },
-      ]);
-    }
+    setMessages!((initial) => [
+      ...initial,
+      {
+        role: 'user',
+        content: values.message,
+      },
+    ]);
 
     let payload: {
       Message: string;
@@ -123,7 +121,7 @@ const ChatInput = () => {
               )}
             >
               <div className='flex h-[30px] w-[30px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
-                <img src={previewImage} className='object-cover' />
+                <img src={previewImageSrc} className='object-cover' loading='lazy' />
               </div>
               <span className='text-2xl font-light'>{image.name}</span>
               <span className='ml-2 text-xl font-normal'>{formatFileSize(image.size)}</span>
@@ -163,7 +161,7 @@ const ChatInput = () => {
                           form.setValue('image', event.currentTarget.files[0]);
                           const reader = new FileReader();
                           reader.onload = () => {
-                            setPreviewImage(reader.result as string);
+                            setPreviewImageSrc(reader.result as string);
                           };
                           reader.readAsDataURL(event.currentTarget.files[0]);
                         }
