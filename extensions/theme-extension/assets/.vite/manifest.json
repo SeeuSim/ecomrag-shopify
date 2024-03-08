@@ -1,0 +1,20 @@
+{
+  "_browser-ponyfill-BiQqKkwt.js": {
+    "file": "browser-ponyfill-BiQqKkwt.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "frontend/entrypoints/theme.tsx"
+    ]
+  },
+  "frontend/entrypoints/theme.tsx": {
+    "file": "theme-IX-O5cqz.js",
+    "src": "frontend/entrypoints/theme.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "_browser-ponyfill-BiQqKkwt.js"
+    ],
+    "css": [
+      "theme-B37eomBj.css"
+    ]
+  }
+}
