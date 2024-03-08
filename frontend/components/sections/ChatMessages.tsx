@@ -10,11 +10,20 @@ const ChatMessages = () => {
   useEffect(() => {
     const chatWindow = document.getElementById('chat-container')!;
     const resizeObserver = new ResizeObserver(() => {
-      lastMessageRef.current!.scrollIntoView({ behavior: 'auto' });
-      console.log(chatWindow.scrollHeight);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+    const mutationObserver = new MutationObserver(() => {
+      chatWindow.scrollTop = chatWindow.scrollHeight;
     });
     resizeObserver.observe(chatWindow);
-    return () => resizeObserver.disconnect();
+    mutationObserver.observe(chatWindow, {
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
   }, []);
 
   return (
@@ -25,7 +34,7 @@ const ChatMessages = () => {
       {messages.map((element, index) => (
         <Message key={index} {...element} />
       ))}
-      <div ref={lastMessageRef} className='text-[0px] text-transparent'>
+      <div ref={lastMessageRef} id='chat-last-child' className='text-[0px] text-transparent'>
         A{/* has to add some dummy text here, else Vite will not render */}
       </div>
     </div>

@@ -52,14 +52,20 @@ const App: React.FC<{}> = () => {
             className={cn(
               'z-[1100] translate-x-[-24px] translate-y-[44px]',
               'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-              'max-h-[90dvh] min-h-[550px] min-w-[450px] max-w-[90dvw]',
+              'h-[90dvh] max-w-[90dvw] tall:h-[550px] wide:w-[450px]',
               'flex flex-col'
             )}
           >
             <ChatMessagesContext.Provider
               value={{ messages, setMessages, isChatLoading, setIsChatLoading }}
             >
-              <div id='chat-container' className='flex flex-col overflow-y-scroll'>
+              <div
+                id='chat-container'
+                className={cn(
+                  'scrollbar scrollbar-thumb-primary/20 scrollbar-thumb-rounded-full',
+                  'flex h-full flex-col overflow-y-auto overflow-x-hidden'
+                )}
+              >
                 <ChatHeader
                   name={shopSettings.name ?? 'AskShop.AI'}
                   onClick={() => setIsOpen((_open) => !_open)}

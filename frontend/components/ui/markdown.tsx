@@ -56,7 +56,7 @@ export const MarkdownComponent = React.forwardRef<HTMLDivElement, Props>(
           },
           img({ src }) {
             return (
-              <img src={src} className='max-w-[200px] rounded-xl border border-border shadow-sm' />
+              <img src={src} className='max-w-full rounded-xl border border-border shadow-sm' />
             );
           },
         }}

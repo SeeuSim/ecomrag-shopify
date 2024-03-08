@@ -107,6 +107,12 @@ const ChatInput = () => {
       }
     }
     setIsSubmitting!(false);
+
+    // Dummy timeout for image load on last response
+    setTimeout(() => {
+      const chatWindow = document.getElementById('chat-window')!;
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }, 600);
   };
 
   return (

@@ -25,7 +25,7 @@ export const Message = React.forwardRef<HTMLDivElement, MessageProps>(({ content
           className={cn(
             'prose text-xl text-primary-foreground',
             role === 'system' && 'text-secondary-foreground',
-            'prose-a:text-blue-500'
+            'prose-a:text-primary/70 prose-a:hover:text-primary'
           )}
         >
           {content}
