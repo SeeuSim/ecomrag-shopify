@@ -18,7 +18,7 @@
     "cleanup": "rimraf --glob extensions/*/assets/*.{json,geetkeep,js,css}",
     "info": "shopify app info",
     "generate": "shopify app generate",
-    "fmt": "prettier --config ./.prettierrc \"./frontend/**/*.jsx\" --write"
+    "fmt": "prettier --config ./.prettierrc \"./frontend/**/*.{ts,tsx}\" --write"
   },
   "dependencies": {
     "@gadget-client/ecomrag": "^1.1.0-development.2003",

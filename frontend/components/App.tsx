@@ -56,7 +56,9 @@ const App: React.FC<{}> = () => {
               'flex flex-col'
             )}
           >
-            <ChatMessagesContext.Provider value={{ messages, setMessages, isChatLoading, setIsChatLoading }}>
+            <ChatMessagesContext.Provider
+              value={{ messages, setMessages, isChatLoading, setIsChatLoading }}
+            >
               <div id='chat-container' className='flex flex-col overflow-y-scroll'>
                 <ChatHeader
                   name={shopSettings.name ?? 'AskShop.AI'}

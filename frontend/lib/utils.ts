@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-type TGetShopSettingsReturnType = Partial<{ name: string; introductionMessage: string }>
+type TGetShopSettingsReturnType = Partial<{ name: string; introductionMessage: string }>;
 
 export async function getShopSettings(gadgetApi: typeof api) {
   let payload: TGetShopSettingsReturnType = {};
@@ -40,4 +40,4 @@ export async function getShopSettings(gadgetApi: typeof api) {
   }
 
   return payload;
-};
+}

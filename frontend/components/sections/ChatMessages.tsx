@@ -4,17 +4,18 @@ import { Message } from '@/components/sections/chat/Message';
 import { ChatMessagesContext } from './utils';
 
 const ChatMessages = () => {
-  const { messages, isChatLoading } = useContext(ChatMessagesContext);
+  const { messages } = useContext(ChatMessagesContext);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // lastMessageRef.current!.scrollIntoView({ behavior: 'auto' });
-    const timeout = setTimeout(
-      () => lastMessageRef.current!.scrollIntoView({ behavior: 'auto' }),
-      100
-    );
-    return () => clearTimeout(timeout);
-  }, [messages, isChatLoading, lastMessageRef]);
+    const chatWindow = document.getElementById('chat-container')!;
+    const resizeObserver = new ResizeObserver(() => {
+      lastMessageRef.current!.scrollIntoView({ behavior: 'auto' });
+      console.log(chatWindow.scrollHeight);
+    });
+    resizeObserver.observe(chatWindow);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   return (
     <div
