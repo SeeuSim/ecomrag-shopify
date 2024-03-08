@@ -1,9 +1,13 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "Ecom Rag 2"
 client_id = "27505e5bb61eadaced2c7f7ede047114"
+name = "Ecom Rag 2"
 application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
 embedded = true
+
+[build]
+dev_store_url = "ecom-rag.myshopify.com"
+include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -19,6 +23,3 @@ api_version = "2024-01"
 
 [pos]
 embedded = false
-
-[build]
-dev_store_url = "ecom-rag.myshopify.com"
