@@ -20,13 +20,14 @@ const initialMessage: MessageProps = {
 
 const App: React.FC<{}> = () => {
   const [open, setIsOpen] = useState(false);
+  const [isChatLoading, setIsChatLoading] = useState(false);
   const [shopSettings, setShopSettings] = useState<Awaited<ReturnType<typeof getShopSettings>>>({});
 
   const [messages, setMessages] = useState([initialMessage]);
 
   useEffect(() => {
     getShopSettings(api).then(setShopSettings);
-  });
+  }, []);
 
   const resetMessages = useMemo(() => {
     return () =>
@@ -55,7 +56,7 @@ const App: React.FC<{}> = () => {
               'flex flex-col'
             )}
           >
-            <ChatMessagesContext.Provider value={{ messages, setMessages }}>
+            <ChatMessagesContext.Provider value={{ messages, setMessages, isChatLoading, setIsChatLoading }}>
               <div id='chat-container' className='flex flex-col overflow-y-scroll'>
                 <ChatHeader
                   name={shopSettings.name ?? 'AskShop.AI'}

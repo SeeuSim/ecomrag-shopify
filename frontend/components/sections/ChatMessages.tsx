@@ -4,17 +4,17 @@ import { Message } from '@/components/sections/chat/Message';
 import { ChatMessagesContext } from './utils';
 
 const ChatMessages = () => {
-  const { messages } = useContext(ChatMessagesContext);
+  const { messages, isChatLoading } = useContext(ChatMessagesContext);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // lastMessageRef.current!.scrollIntoView({ behavior: 'auto' });
     const timeout = setTimeout(
       () => lastMessageRef.current!.scrollIntoView({ behavior: 'auto' }),
-      300
+      100
     );
     return () => clearTimeout(timeout);
-  }, [messages, lastMessageRef]);
+  }, [messages, isChatLoading, lastMessageRef]);
 
   return (
     <div

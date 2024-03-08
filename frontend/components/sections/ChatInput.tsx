@@ -13,9 +13,13 @@ import { cn } from '@/lib/utils';
 import { ChatMessagesContext, formSchema, formatFileSize } from './utils';
 
 const ChatInput = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImageSrc, setPreviewImageSrc] = useState('');
-  const { setMessages } = useContext(ChatMessagesContext);
+  const {
+    setMessages,
+    isChatLoading: isSubmitting,
+    setIsChatLoading: setIsSubmitting,
+  } = useContext(ChatMessagesContext);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +33,7 @@ const ChatInput = () => {
   const image = form.watch('image');
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true);
+    setIsSubmitting!(true);
     form.reset();
     setMessages!((initial) => [
       ...initial,
@@ -74,7 +78,7 @@ const ChatInput = () => {
     });
 
     if (!response.ok) {
-      setIsSubmitting(false);
+      setIsSubmitting!(false);
       // TODO: handle
       return;
     }
@@ -102,8 +106,7 @@ const ChatInput = () => {
         );
       }
     }
-
-    setIsSubmitting(false);
+    setIsSubmitting!(false);
   };
 
   return (

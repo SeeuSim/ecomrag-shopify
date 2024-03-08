@@ -19,9 +19,12 @@ export function formatFileSize(bytes: number) {
 
 interface ChatMessageState {
   messages: Array<MessageProps>
-  setMessages?: React.Dispatch<React.SetStateAction<Array<MessageProps>>> 
+  setMessages?: React.Dispatch<React.SetStateAction<Array<MessageProps>>>
+  isChatLoading: boolean;
+  setIsChatLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChatMessagesContext = React.createContext<ChatMessageState>({
-    messages: []
+  messages: [],
+  isChatLoading: false
 });
