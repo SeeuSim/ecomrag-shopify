@@ -56,7 +56,14 @@ export const MarkdownComponent = React.forwardRef<HTMLDivElement, Props>(
           },
           img({ src }) {
             return (
-              <img src={src} className='max-w-full rounded-xl border border-border shadow-sm' />
+              <img
+                src={src}
+                onLoad={() => {
+                  var chatWindow = document.getElementById('chat-container')!;
+                  chatWindow.scrollTop = chatWindow.scrollHeight;
+                }}
+                className='max-w-full rounded-xl border border-border shadow-sm'
+              />
             );
           },
         }}

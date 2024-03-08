@@ -62,7 +62,6 @@ const App: React.FC<{}> = () => {
               <div
                 id='chat-container'
                 className={cn(
-                  'scrollbar scrollbar-thumb-primary/20 scrollbar-thumb-rounded-full',
                   'flex h-full flex-col overflow-y-auto overflow-x-hidden'
                 )}
               >
