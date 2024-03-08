@@ -6,10 +6,11 @@ import { cn } from '@/lib/utils';
 import { ChatMessagesContext } from './utils';
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  name: string;
   resetMessages?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-const ChatHeader: React.FC<Props> = ({ onClick, resetMessages }) => {
+const ChatHeader: React.FC<Props> = ({ onClick, resetMessages, name: shopName }) => {
   const { messages } = useContext(ChatMessagesContext);
 
   return (
@@ -20,7 +21,7 @@ const ChatHeader: React.FC<Props> = ({ onClick, resetMessages }) => {
         'z-20 bg-primary/70 px-6 py-4 text-primary-foreground backdrop-blur-sm'
       )}
     >
-      <span className='font-medium'>AskShop.AI</span>
+      <span className='font-medium'>{shopName}</span>
       <div className='inline-flex gap-2'>
         {messages.length > 1 && (
           <Button variant='ghost' className='text-xl' onClick={resetMessages}>

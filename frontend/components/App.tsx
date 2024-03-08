@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import api from '../lib/api';
 import { Provider } from '@gadgetinc/react';
 
 import { Toggle } from '@/components/buttons/Toggle';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { cn, getShopSettings } from '@/lib/utils';
 
 import ChatHeader from './sections/ChatHeader';
 import ChatInput from './sections/ChatInput';
@@ -20,7 +20,20 @@ const initialMessage: MessageProps = {
 
 const App: React.FC<{}> = () => {
   const [open, setIsOpen] = useState(false);
+  const [shopSettings, setShopSettings] = useState<Awaited<ReturnType<typeof getShopSettings>>>({});
+
   const [messages, setMessages] = useState([initialMessage]);
+
+  useEffect(() => {
+    getShopSettings(api).then(setShopSettings);
+  });
+
+  const resetMessages = useMemo(() => {
+    return () =>
+      setMessages([
+        { ...initialMessage, content: shopSettings.introductionMessage ?? initialMessage.content },
+      ]);
+  }, [shopSettings]);
 
   return (
     <Provider api={api}>
@@ -45,8 +58,9 @@ const App: React.FC<{}> = () => {
             <ChatMessagesContext.Provider value={{ messages, setMessages }}>
               <div id='chat-container' className='flex flex-col overflow-y-scroll'>
                 <ChatHeader
+                  name={shopSettings.name ?? 'AskShop.AI'}
                   onClick={() => setIsOpen((_open) => !_open)}
-                  resetMessages={() => setMessages([initialMessage])}
+                  resetMessages={resetMessages}
                 />
                 <ChatMessages />
               </div>
