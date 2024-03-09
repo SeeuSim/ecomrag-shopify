@@ -73,7 +73,7 @@ const ChatInput = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*' // TODO: change this to the FE url
+        'Access-Control-Allow-Origin': window.location.origin // TODO: change this to the FE url
       },
       body: JSON.stringify(payload),
     });

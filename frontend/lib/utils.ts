@@ -23,7 +23,7 @@ export async function getShopSettings(gadgetApi: typeof api) {
   const settingsResponse: Response = await gadgetApi.fetch(url, {
     method: 'GET',
     headers: {
-      'Access-Control-Allow-Origin': '*' // TODO: change this to the FE url
+      'Access-Control-Allow-Origin': window.location.origin // TODO: change this to the FE url
     }
   });
 
