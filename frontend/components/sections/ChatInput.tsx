@@ -16,6 +16,7 @@ const ChatInput = () => {
   // const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImageSrc, setPreviewImageSrc] = useState('');
   const {
+    messages,
     setMessages,
     isChatLoading: isSubmitting,
     setIsChatLoading: setIsSubmitting,
@@ -47,9 +48,11 @@ const ChatInput = () => {
       Message: string;
       ShopId: string;
       Image?: { FileName: string; FileType: string; FileContent: unknown };
+      ChatHistory: typeof messages
     } = {
       Message: values.message,
       ShopId: sessionStorage.getItem('shop-id')!,
+      ChatHistory: messages.slice(1) // Latest change not propagated
     };
 
     const toBase64 = (file: File) =>
