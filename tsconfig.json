@@ -27,10 +27,8 @@
     },
 
     /* Gadget API */
-    "typeRoots": [
-      "node_modules/@gadget-client/ecomrag/types.d.ts"
-    ]
+    "typeRoots": ["node_modules/@gadget-client/ecomrag/types.d.ts"]
   },
-  "include": ["frontend"],
+  "include": ["global.d.ts", "frontend"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
