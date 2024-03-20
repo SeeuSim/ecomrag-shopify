@@ -10,11 +10,12 @@ type TGetShopSettingsReturnType = Partial<{ name: string; introductionMessage: s
 
 export async function getShopSettings(gadgetApi: typeof api) {
   let payload: TGetShopSettingsReturnType = {};
-  const shopId = sessionStorage.getItem('shop-id')!;
-  if (typeof shopId !== 'string') {
+
+  if (!window.askShopAI_data || !window.askShopAI_data.shopId) {
     // TODO: add logging
     return payload;
   }
+  const shopId = window.askShopAI_data.shopId;
 
   const query = new URLSearchParams();
   query.set('shopId', shopId);
@@ -23,7 +24,7 @@ export async function getShopSettings(gadgetApi: typeof api) {
   const settingsResponse: Response = await gadgetApi.fetch(url, {
     method: 'GET',
     headers: {
-      'Access-Control-Allow-Origin': window.location.origin // TODO: change this to the FE url
+      'Access-Control-Allow-Origin': window.location.origin
     }
   });
 
@@ -35,12 +36,7 @@ export async function getShopSettings(gadgetApi: typeof api) {
   const data: Partial<{ name: string; introductionMessage: string }> =
     await settingsResponse.json();
 
-  if (data.name) {
-    payload = { ...payload, name: data.name };
-  }
-  if (data.introductionMessage) {
-    payload = { ...payload, introductionMessage: data.introductionMessage };
-  }
+  payload = { ...payload, ...data };
 
   return payload;
 }

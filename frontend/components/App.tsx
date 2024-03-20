@@ -52,7 +52,7 @@ const App: React.FC<{}> = () => {
             className={cn(
               'z-[1100] translate-x-[-24px] translate-y-[44px]',
               'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-              'h-[90dvh] max-w-[90dvw] tall:h-[550px] wide:w-[450px]',
+              'wide:w-[450px] h-[calc(100dvh-60px)] max-w-[90dvw] tall:h-[calc(100dvh-160px)]',
               'flex flex-col'
             )}
           >
@@ -61,9 +61,7 @@ const App: React.FC<{}> = () => {
             >
               <div
                 id='chat-container'
-                className={cn(
-                  'flex h-full flex-col overflow-y-auto overflow-x-hidden'
-                )}
+                className={cn('flex h-full flex-col overflow-y-auto overflow-x-hidden')}
               >
                 <ChatHeader
                   name={shopSettings.name ?? 'AskShop.AI'}

@@ -15,7 +15,6 @@ export const Toggle: React.FC = () => {
     if (imgSrcActual && imgSrcActual.length > 0) {
       setImgSrc(imgSrcActual);
     }
-    console.log();
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Loader2, Send, X } from 'lucide-react';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -10,10 +10,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import { cn } from '@/lib/utils';
+
 import { ChatMessagesContext, formSchema, formatFileSize } from './utils';
 
 const ChatInput = () => {
-  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImageSrc, setPreviewImageSrc] = useState('');
   const {
     messages,
@@ -32,6 +32,11 @@ const ChatInput = () => {
   });
 
   const image = form.watch('image');
+  const message = form.watch('message');
+
+  const isDisabled = useMemo(() => {
+    return isSubmitting || message.length === 0;
+  }, [message, isSubmitting]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting!(true);
@@ -48,11 +53,11 @@ const ChatInput = () => {
       Message: string;
       ShopId: string;
       Image?: { FileName: string; FileType: string; FileContent: unknown };
-      ChatHistory: typeof messages
+      ChatHistory: typeof messages;
     } = {
       Message: values.message,
       ShopId: sessionStorage.getItem('shop-id')!,
-      ChatHistory: messages.slice(1) // Latest change not propagated
+      ChatHistory: messages.slice(1), // Latest change not propagated
     };
 
     const toBase64 = (file: File) =>
@@ -76,7 +81,7 @@ const ChatInput = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': window.location.origin // TODO: change this to the FE url
+        'Access-Control-Allow-Origin': window.location.origin, // TODO: change this to the FE url
       },
       body: JSON.stringify(payload),
     });
@@ -130,7 +135,7 @@ const ChatInput = () => {
               <div className='flex h-[30px] w-[30px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
                 <img src={previewImageSrc} className='object-cover' loading='lazy' />
               </div>
-              <span className='text-2xl font-light'>{image.name}</span>
+              <span className='truncate text-2xl font-light'>{image.name}</span>
               <span className='ml-2 text-xl font-normal'>{formatFileSize(image.size)}</span>
               <div
                 className={cn(
@@ -163,6 +168,7 @@ const ChatInput = () => {
                       id='file-upload'
                       type='file'
                       accept='image/*'
+                      disabled={isSubmitting}
                       onInput={(event) => {
                         if (event.currentTarget.files && event.currentTarget.files.length > 0) {
                           form.setValue('image', event.currentTarget.files[0]);
@@ -203,7 +209,7 @@ const ChatInput = () => {
           <Button
             className='flex h-[36px] w-[36px] flex-shrink-0 flex-grow-0 rounded-lg p-2'
             type='submit'
-            disabled={isSubmitting}
+            disabled={isDisabled}
           >
             {isSubmitting ? (
               <Loader2 className='h-6 w-6 animate-spin' />

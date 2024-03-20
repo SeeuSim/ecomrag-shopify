@@ -16,8 +16,8 @@ export const Message = React.forwardRef<HTMLDivElement, MessageProps>(({ content
       className={cn(
         'max-w-[80%] p-5 text-xl',
         role == 'system'
-          ? 'mr-auto bg-secondary text-secondary-foreground'
-          : 'ml-auto bg-primary text-primary-foreground'
+          ? 'mr-auto border-border bg-secondary text-secondary-foreground'
+          : 'ml-auto border-primary bg-primary text-primary-foreground'
       )}
     >
       <CardContent className='p-0'>
