@@ -1,7 +1,12 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
+[webhooks.privacy_compliance]
+customer_deletion_url = "https://ecomrag.gadget.app/webhooks/customer_deletion"
+customer_data_request_url = "https://ecomrag.gadget.app/webhooks/customer_data_request"
+shop_deletion_url = "https://ecomrag.gadget.app/webhooks/shop_deletion"
+
 client_id = "27505e5bb61eadaced2c7f7ede047114"
-name = "Ecom Rag 2"
+name = "askshopai"
 application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
 embedded = true
 
