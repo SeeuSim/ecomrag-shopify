@@ -51,12 +51,12 @@ const ChatInput = () => {
 
     let payload: {
       Message: string;
-      ShopId: string;
+      ShopId?: string;
       Image?: { FileName: string; FileType: string; FileContent: unknown };
       ChatHistory: typeof messages;
     } = {
       Message: values.message,
-      ShopId: sessionStorage.getItem('shop-id')!,
+      ShopId: window.askShopAI_data?.shopId,
       ChatHistory: messages.slice(1), // Latest change not propagated
     };
 
