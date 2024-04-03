@@ -1,9 +1,12 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "askshopai"
 client_id = "bcb89a022769c843ce7d6a7cdebae8ec"
+name = "askshopai"
 application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
 embedded = true
+
+[build]
+dev_store_url = "jj2000-chatbot.myshopify.com"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -19,6 +22,3 @@ api_version = "2024-01"
 
 [pos]
 embedded = false
-
-[build]
-dev_store_url = "jj2000-chatbot.myshopify.com"

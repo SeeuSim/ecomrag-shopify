@@ -15,7 +15,7 @@ import { MessageProps } from './sections/chat/Message';
 
 const initialMessage: MessageProps = {
   role: 'system',
-  content: `Hello! Feel free to ask any questions based on your needs! Such as a Y2K fit or looking like a specific celebrity. I'm here to help you find the perfect outfit!`,
+  content: `Hello! Feel free to ask any questions based on your needs! Such as a Y2K fit or looking like a specific celebrity. I'm here to help you find the perfect outfits!`,
 };
 
 const App: React.FC<{}> = () => {
@@ -32,7 +32,7 @@ const App: React.FC<{}> = () => {
   const resetMessages = useMemo(() => {
     return () =>
       setMessages([
-        { ...initialMessage, content: shopSettings.introductionMessage ?? initialMessage.content },
+        { ...initialMessage, content: shopSettings?.introductionMessage ?? initialMessage.content },
       ]);
   }, [shopSettings]);
 
@@ -52,7 +52,7 @@ const App: React.FC<{}> = () => {
             className={cn(
               'z-[1100] translate-x-[-24px] translate-y-[44px]',
               'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-              'wide:w-[450px] h-[calc(100dvh-60px)] max-w-[90dvw] tall:h-[calc(100dvh-160px)]',
+              'h-[calc(100dvh-60px)] max-w-[90dvw] tall:h-[calc(100dvh-160px)] wide:w-[450px]',
               'flex flex-col'
             )}
           >
@@ -64,7 +64,7 @@ const App: React.FC<{}> = () => {
                 className={cn('flex h-full flex-col overflow-y-auto overflow-x-hidden')}
               >
                 <ChatHeader
-                  name={shopSettings.name ?? 'AskShop.AI'}
+                  name={shopSettings?.name ?? 'AskShop.AI'}
                   onClick={() => setIsOpen((_open) => !_open)}
                   resetMessages={resetMessages}
                 />
