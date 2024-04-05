@@ -2,7 +2,7 @@
 
 client_id = "27505e5bb61eadaced2c7f7ede047114"
 name = "askshopai"
-application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
+application_url = "https://ecomrag.gadget.app/api/shopify/install-or-render"
 embedded = true
 
 [build]
@@ -15,7 +15,7 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://ecomrag--development.gadget.app/api/connections/auth/shopify/callback"
+  "https://ecomrag.gadget.app/api/connections/auth/shopify/callback"
 ]
 
 [webhooks]
