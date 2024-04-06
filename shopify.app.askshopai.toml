@@ -1,12 +1,13 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "bcb89a022769c843ce7d6a7cdebae8ec"
+client_id = "27505e5bb61eadaced2c7f7ede047114"
 name = "askshopai"
-application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
+application_url = "https://ecomrag.gadget.app/api/shopify/install-or-render"
 embedded = true
 
 [build]
-dev_store_url = "jj2000-chatbot.myshopify.com"
+dev_store_url = "ecom-rag.myshopify.com"
+include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -14,11 +15,16 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://ecomrag--development.gadget.app/api/connections/auth/shopify/callback"
+  "https://ecomrag.gadget.app/api/connections/auth/shopify/callback"
 ]
 
 [webhooks]
 api_version = "2024-01"
+
+  [webhooks.privacy_compliance]
+  customer_deletion_url = "https://ecomrag.gadget.app/webhooks/customers_redact"
+  customer_data_request_url = "https://ecomrag.gadget.app/webhooks/customer_data_request"
+  shop_deletion_url = "https://ecomrag.gadget.app/webhooks/shop_redact"
 
 [pos]
 embedded = false
