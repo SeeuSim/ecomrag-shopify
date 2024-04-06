@@ -1,17 +1,17 @@
 {
-  "_browser-ponyfill-Dex2l6O3.js": {
-    "file": "browser-ponyfill-Dex2l6O3.js",
+  "_browser-ponyfill-BA8p0FtA.js": {
+    "file": "browser-ponyfill-BA8p0FtA.js",
     "isDynamicEntry": true,
     "imports": [
       "frontend/entrypoints/theme.tsx"
     ]
   },
   "frontend/entrypoints/theme.tsx": {
-    "file": "theme-DXo9d3QZ.js",
+    "file": "theme-CaCNu5_s.js",
     "src": "frontend/entrypoints/theme.tsx",
     "isEntry": true,
     "dynamicImports": [
-      "_browser-ponyfill-Dex2l6O3.js"
+      "_browser-ponyfill-BA8p0FtA.js"
     ],
     "css": [
       "theme-DVlYDhnI.css"

@@ -1,0 +1,22 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "7f392dc8764d26bb1806e46dea56ca30"
+name = "dev.askshop.ai"
+application_url = "https://ecomrag--development.gadget.app/api/shopify/install-or-render"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [ "https://ecomrag--development.gadget.app/api/connections/auth/shopify/callback" ]
+
+[webhooks]
+api_version = "2024-04"
+
+[pos]
+embedded = false
