@@ -24,7 +24,7 @@ export const Message = React.forwardRef<HTMLDivElement, MessageProps>(
       >
         <CardContent className='p-0'>
           {img && (
-            <div className='ml-4 mt-4 flex max-w-[200px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
+            <div className='mb-2 flex max-w-[200px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
               <img src={img} className='object-cover' loading='lazy' />
             </div>
           )}
