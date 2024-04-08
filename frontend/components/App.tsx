@@ -30,10 +30,12 @@ const App: React.FC<{}> = () => {
   }, []);
 
   const resetMessages = useMemo(() => {
-    return () =>
+    return () => {
       setMessages([
         { ...initialMessage, content: shopSettings?.introductionMessage ?? initialMessage.content },
       ]);
+      setIsChatLoading(false);
+    };
   }, [shopSettings]);
 
   return (
@@ -52,7 +54,7 @@ const App: React.FC<{}> = () => {
             className={cn(
               'z-[1100] translate-x-[-24px] translate-y-[44px]',
               'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-              'h-[calc(100dvh-60px)] max-w-[90dvw] tall:h-[calc(100dvh-160px)] wide:w-[450px]',
+              'max-h-[calc(100dvh-60px)] min-h-[min(100dvh-50px,550px)] max-w-[90dvw] tall:max-h-[calc(100dvh-160px)] wide:w-[450px]',
               'flex flex-col'
             )}
           >

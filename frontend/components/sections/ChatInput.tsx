@@ -46,8 +46,10 @@ const ChatInput = () => {
       {
         role: 'user',
         content: values.message,
+        img: previewImageSrc,
       },
     ]);
+    setPreviewImageSrc('');
 
     let payload: {
       Message: string;
@@ -124,7 +126,7 @@ const ChatInput = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className='mt-auto flex w-full flex-col gap-4 border-t border-border p-6 pt-4'
       >
-        {image && (
+        {previewImageSrc.length > 0 && (
           <div className='flex w-full'>
             <div
               className={cn(
@@ -135,8 +137,10 @@ const ChatInput = () => {
               <div className='flex h-[30px] w-[30px] flex-shrink-0 flex-grow-0 overflow-clip rounded-md'>
                 <img src={previewImageSrc} className='object-cover' loading='lazy' />
               </div>
-              <span className='truncate text-2xl font-light'>{image.name}</span>
-              <span className='ml-2 text-xl font-normal'>{formatFileSize(image.size)}</span>
+              <span className='truncate text-2xl font-light'>{image?.name}</span>
+              <span className='ml-2 text-xl font-normal'>
+                {image?.size && formatFileSize(image.size)}
+              </span>
               <div
                 className={cn(
                   buttonVariants({ variant: 'ghost' }),
@@ -144,6 +148,7 @@ const ChatInput = () => {
                 )}
                 onClick={() => {
                   form.setValue('image', undefined);
+                  setPreviewImageSrc('');
                 }}
               >
                 <X className='h-7 w-7' />
@@ -169,7 +174,7 @@ const ChatInput = () => {
                       type='file'
                       accept='image/*'
                       disabled={isSubmitting}
-                      onInput={(event) => {
+                      onChange={(event) => {
                         if (event.currentTarget.files && event.currentTarget.files.length > 0) {
                           form.setValue('image', event.currentTarget.files[0]);
                           const reader = new FileReader();
@@ -177,6 +182,7 @@ const ChatInput = () => {
                             setPreviewImageSrc(reader.result as string);
                           };
                           reader.readAsDataURL(event.currentTarget.files[0]);
+                          event.currentTarget.value = '';
                         }
                       }}
                       className='hidden'

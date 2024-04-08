@@ -6,6 +6,7 @@ application_url = "https://ecomrag--development.gadget.app/api/shopify/install-o
 embedded = true
 
 [build]
+dev_store_url = "dev-seeusim01.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
@@ -13,7 +14,9 @@ include_config_on_deploy = true
 use_legacy_install_flow = true
 
 [auth]
-redirect_urls = [ "https://ecomrag--development.gadget.app/api/connections/auth/shopify/callback" ]
+redirect_urls = [
+  "https://ecomrag--development.gadget.app/api/connections/auth/shopify/callback"
+]
 
 [webhooks]
 api_version = "2024-04"

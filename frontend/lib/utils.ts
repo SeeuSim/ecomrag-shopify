@@ -24,8 +24,8 @@ export async function getShopSettings(gadgetApi: typeof api) {
   const settingsResponse: Response = await gadgetApi.fetch(url, {
     method: 'GET',
     headers: {
-      'Access-Control-Allow-Origin': window.location.origin
-    }
+      'Access-Control-Allow-Origin': window.location.origin,
+    },
   });
 
   if (!settingsResponse.ok) {
