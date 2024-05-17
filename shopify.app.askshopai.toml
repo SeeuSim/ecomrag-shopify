@@ -6,6 +6,7 @@ application_url = "https://ecomrag.gadget.app/api/shopify/install-or-render"
 embedded = true
 
 [build]
+dev_store_url = "ecom-rag.myshopify.com"
 include_config_on_deploy = false
 
 [access_scopes]
