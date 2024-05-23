@@ -62,9 +62,9 @@ const App: React.FC<{}> = () => {
             side='top'
             id='chat-window'
             className={cn(
-              'z-[1100] translate-x-[-24px] translate-y-[44px]',
+              'z-[1100] translate-y-[44px] wide:translate-x-[-24px]',
               'overflow-clip rounded-lg border-0 bg-background p-0 text-card-foreground shadow',
-              'max-h-[calc(100dvh-60px)] min-h-[min(100dvh-50px,550px)] max-w-[90dvw] tall:max-h-[calc(100dvh-160px)] wide:w-[450px]',
+              'max-h-[calc(100dvh-60px)] min-h-[min(100dvh-50px,550px)] w-screen tall:max-h-[calc(100dvh-160px)] wide:w-[450px]',
               'flex flex-col'
             )}
           >
