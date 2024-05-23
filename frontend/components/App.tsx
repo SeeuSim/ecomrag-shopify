@@ -25,10 +25,20 @@ const App: React.FC<{}> = () => {
 
   const [messages, setMessages] = useState([initialMessage]);
 
+  // 1. Fetch from shop API and display accordingly
   useEffect(() => {
     getShopSettings(api).then(setShopSettings);
   }, []);
 
+  // 2. Set initial message as described by shop settings API
+  useEffect(() => {
+    setMessages([
+      { ...initialMessage, content: shopSettings?.introductionMessage ?? initialMessage.content },
+      ...messages.slice(1),
+    ]);
+  }, [shopSettings]);
+
+  // 3. Provide hook to reset messages
   const resetMessages = useMemo(() => {
     return () => {
       setMessages([
