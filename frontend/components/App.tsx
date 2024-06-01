@@ -15,7 +15,7 @@ import { MessageProps } from './sections/chat/Message';
 
 const initialMessage: MessageProps = {
   role: 'system',
-  content: `Hello! Feel free to ask any questions based on your needs! Such as a Y2K fit or looking like a specific celebrity. I'm here to help you find the perfect outfits!`,
+  content: `Hello! Feel free to ask any questions based on your needs! I'll recommend you the best products!`,
 };
 
 const App: React.FC<{}> = () => {
