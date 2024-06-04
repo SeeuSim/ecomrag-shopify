@@ -200,7 +200,7 @@ const ChatInput = () => {
                 <FormControl>
                   <Input
                     type='text'
-                    placeholder='Type your message...'
+                    placeholder="Tell us what you're looking for..."
                     disabled={isSubmitting}
                     className={cn(
                       'flex h-[36px] w-full rounded-lg text-2xl',
