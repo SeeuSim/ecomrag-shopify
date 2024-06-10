@@ -200,7 +200,7 @@ const ChatInput = () => {
                 <FormControl>
                   <Input
                     type='text'
-                    placeholder="Type in your preferences, and I'll find matching products."
+                    placeholder="Enter your preferences to find matching products."
                     disabled={isSubmitting}
                     className={cn(
                       'flex h-[36px] w-full rounded-lg text-2xl',
