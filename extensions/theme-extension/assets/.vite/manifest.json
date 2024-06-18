@@ -1,26 +1,20 @@
 {
-  "_browser-ponyfill-BU0nlaYu.js": {
-    "file": "browser-ponyfill-BU0nlaYu.js",
+  "_browser-ponyfill-BkDtbKbH.js": {
+    "file": "browser-ponyfill-BkDtbKbH.js",
     "isDynamicEntry": true,
     "imports": [
       "frontend/entrypoints/theme.tsx"
     ]
   },
   "frontend/entrypoints/theme.tsx": {
-    "file": "theme-CPTBfthm.js",
+    "file": "theme-D1WDOmv1.js",
     "src": "frontend/entrypoints/theme.tsx",
     "isEntry": true,
     "dynamicImports": [
-      "_browser-ponyfill-BU0nlaYu.js",
-      "node_modules/@gadgetinc/api-client-core/dist/esm/graphql-live-query-utils/index.js"
+      "_browser-ponyfill-BkDtbKbH.js"
     ],
     "css": [
       "theme-D_OMoDR-.css"
     ]
-  },
-  "node_modules/@gadgetinc/api-client-core/dist/esm/graphql-live-query-utils/index.js": {
-    "file": "index-DoZXmLJi.js",
-    "src": "node_modules/@gadgetinc/api-client-core/dist/esm/graphql-live-query-utils/index.js",
-    "isDynamicEntry": true
   }
 }
