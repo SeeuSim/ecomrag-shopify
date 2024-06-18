@@ -35,7 +35,7 @@ const ChatInput = () => {
   const message = form.watch('message');
 
   const isDisabled = useMemo(() => {
-    return isSubmitting || message.length === 0;
+    return isSubmitting || message.length < 2;
   }, [message, isSubmitting]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -200,10 +200,11 @@ const ChatInput = () => {
                 <FormControl>
                   <Input
                     type='text'
-                    placeholder="Enter your preferences to find matching products."
+                    placeholder={`Search for your preferred products here...`}
                     disabled={isSubmitting}
                     className={cn(
                       'flex h-[36px] w-full rounded-lg text-2xl',
+                      'placeholder:text-ellipsis placeholder:text-muted-foreground/70',
                       fieldState.error && 'ring-1 ring-destructive'
                     )}
                     {...field}
